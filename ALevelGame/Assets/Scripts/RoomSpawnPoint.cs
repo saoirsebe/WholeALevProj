@@ -32,8 +32,10 @@ public class RoomSpawnPoint : MonoBehaviour
         {
             searchTagDoor = "Door";
             List<ObjectLocation> doors = new List<ObjectLocation>();
-            doors = FindObjectswithTag(searchTagDoor, obj,doors);//Adds Door location of each door to the list doors
-            s11=s1.GetComponent<RMapGenorator>();
+            s11 = s1.GetComponent<RMapGenorator>();
+            doorsNotVisited = s11.doorsNotVisited();
+            doors = FindObjectswithTag(searchTagDoor, obj,doors, doorsNotVisited);//Adds Door location of each door to the list doors
+            
         
             Room room = new Room(locationx, locationy, doors);
             s11.AddToRoomsList(room);//Adds room location and list of its doors to roomsList
@@ -41,7 +43,7 @@ public class RoomSpawnPoint : MonoBehaviour
 
             searchTagWallTile = "Wall Tile";
             List<ObjectLocation> walls = new List<ObjectLocation>();
-            walls = FindObjectswithTag(searchTagWallTile, obj, walls);//Adds Wall location of each Wall to the list walls
+            walls = FindObjectswithTag(searchTagWallTile, obj, walls, doorsNotVisited);//Adds Wall location of each Wall to the list walls
             s11.AddToWallsList(walls);//Adds wall tiles in walls to total wallsList
             s11.MakeWeightToMoveArray();
             s11.roomsMade += 1;
@@ -58,7 +60,7 @@ public class RoomSpawnPoint : MonoBehaviour
  
     }
 
-    private List<ObjectLocation> GetChildObject(Transform parent, string _tag, List<ObjectLocation> listToAdd)
+    private List<ObjectLocation> GetChildObject(Transform parent, string _tag, List<ObjectLocation> listToAdd, HashSet<ObjectLocation> doorsNotVisited)
     {
         for(int i = 0; i < parent.childCount; i++) //for each child of current room, if game tag == "Door" then add x and y coordinates to the list doors
         {
@@ -72,6 +74,10 @@ public class RoomSpawnPoint : MonoBehaviour
                 yCoord = (int)transPos.y;
 
                 listToAdd.Add(new ObjectLocation(xCoord, yCoord, 0));
+            }
+            if (tagg == "Door")
+            {
+                doorsNotVisited.Add(new ObjectLocation(xCoord, yCoord, 0))
             }
         }
         return listToAdd;

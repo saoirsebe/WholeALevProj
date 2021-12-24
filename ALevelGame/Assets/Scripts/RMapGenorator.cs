@@ -26,6 +26,7 @@ public class RMapGenorator : MonoBehaviour
     private int yend;
     private bool roomsLeft = true;
     private List<ObjectLocation> corridors { get; set; } = new List<ObjectLocation>();
+    public HashSet<ObjectLocation> doorsNotVisited = new HashSet<ObjectLocation>();
     
 
     public void AddToRoomsList(Room room)
@@ -51,7 +52,7 @@ public class RMapGenorator : MonoBehaviour
             }
         }
 
-        ObjectLocation doorStart = new ObjectLocation(0,0,0);
+        ObjectLocation doorStart = new ObjectLocation(5,3,0);
         PickEnd(doorStart,maxint);
 
 
