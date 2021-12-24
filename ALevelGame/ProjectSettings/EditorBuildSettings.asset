@@ -1,0 +1,14 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: 4f3621036dc053d40a6dc3c1b594a20c
+  - enabled: 1
+    path: Assets/Scenes/Room Generating.unity
+    guid: c4ebd3f4a01f96a4bbe11a88659abd1e
+  m_configObjects: {}
