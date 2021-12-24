@@ -50,6 +50,11 @@ public class RMapGenorator : MonoBehaviour
             }
         }
 
+        ObjectLocation startRoomObj = new ObjectLocation();
+        List<ObjectLocation> doorsn = startRoomObj.doors;
+        DoorsInStart(doorsn);
+
+
         while (roomsMade==9 & roomsLeft)
         {
             PickStart();
@@ -61,15 +66,19 @@ public class RMapGenorator : MonoBehaviour
         int rand = Random.Range(0, roomsList.Count);
         Room roomSt = roomsList[rand];
         List<ObjectLocation> doorsn = roomSt.doors;
-        foreach(var door in doorsn)
+
+        DoorsInStart(doorsn,rand)
+    }
+
+    private DoorsInStart(List<ObjectLocation> doorsn, int rand)
+    {
+        foreach (var door in doorsn)
         {
-            xstart = door._x;
-            ystart = door._y;
-            PickEnd(xstart, ystart, rand);
+            PickEnd(door, rand);
             //del door
         }
-        return;
     }
+
 
     private void PickEnd(int xstart, int ystart, int rand)
     {
@@ -80,15 +89,13 @@ public class RMapGenorator : MonoBehaviour
         } while (rand2 == rand);
 
         Room roomSt = roomsList[rand2];
-        List<ObjectLocation> doorsn = roomSt.doors;
+        List<ObjectLocation> doorsn = roomEn.doors;
 
         int rand3;
         rand3 = Random.Range(0, doorsn.Count);
-        ObjectLocation doorEnd = doorsn[rand3];
-        xend = doorEnd._x;
-        yend = doorEnd._y;
+        ObjectLocation endDoor = doorsn[rand3];
 
-        MakeDistanceFromEndArray(xstart,ystart,xend,yend);
+        MakeDistanceFromEndArray(startDoor, endDoor);
     }
 
     public void MakeWeightToMoveArray()
@@ -103,7 +110,7 @@ public class RMapGenorator : MonoBehaviour
     }
 
 
-    private void MakeDistanceFromEndArray(int xstart, int ystart, int xend, int yend)
+    private void MakeDistanceFromEndArray(<ObjectLocation> startDoor,<ObjectLocation> endDoor)
     {
         
     }
