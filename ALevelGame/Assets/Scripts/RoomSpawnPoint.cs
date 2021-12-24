@@ -73,11 +73,12 @@ public class RoomSpawnPoint : MonoBehaviour
                 xCoord = (int)transPos.x;
                 yCoord = (int)transPos.y;
 
-                listToAdd.Add(new ObjectLocation(xCoord, yCoord, 0));
+                newobj = new ObjectLocation(xCoord, yCoord, 0);
+                listToAdd.Add(newobj);
             }
             if (tagg == "Door")
             {
-                doorsNotVisited.Add(new ObjectLocation(xCoord, yCoord, 0))
+                doorsNotVisited.Add(newobj)
             }
         }
         return listToAdd;
