@@ -25,7 +25,8 @@ public class RMapGenorator : MonoBehaviour
     private int xend;
     private int yend;
     private bool roomsLeft = true;
-
+    private List<ObjectLocation> corridors { get; set; } = new List<ObjectLocation>();
+    
 
     public void AddToRoomsList(Room room)
     {
@@ -50,9 +51,8 @@ public class RMapGenorator : MonoBehaviour
             }
         }
 
-        ObjectLocation startRoomObj = new ObjectLocation();
-        List<ObjectLocation> doorsn = startRoomObj.doors;
-        DoorsInStart(doorsn);
+        ObjectLocation doorStart = new ObjectLocation(0,0,0);
+        PickEnd(doorStart,maxint);
 
 
         while (roomsMade==9 & roomsLeft)
@@ -80,7 +80,7 @@ public class RMapGenorator : MonoBehaviour
     }
 
 
-    private void PickEnd(int xstart, int ystart, int rand)
+    private void PickEnd(ObjectLocation startDoor, int rand)
     {
         int rand2;
         do
