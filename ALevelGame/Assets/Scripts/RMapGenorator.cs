@@ -139,14 +139,14 @@ public class RMapGenorator : MonoBehaviour
             ObjectLocation downSquare = new ObjectLocation(xcurrentPosition, ycurrentPosition - 1, 0);
             List<ObjectLocation> adjacentLocations = new List<ObjectLocation>(leftSquare, rightSquare, forwardsquare, downSquare);
 
-            foreach (var square in adjacentLocations)
+            foreach (var square in adjacentLocations) //for each adjacentLocation 
             {
                 bool contains = distanceFromStartArray.contains(square);
-                if (contains)
+                if (contains) //if it an actual square in array
                 {
                     NewWeightSetter(square);
                     bool hasVisted = visited.Contains(square);
-                    if (hasVisted = false)//in visited = false
+                    if (hasVisted = false)//if it hasnt allready been added to the queue before then add to queue
                     {
                         locationsToVisit.Enqueue(square);
                         visited.Add(square);
@@ -160,7 +160,12 @@ public class RMapGenorator : MonoBehaviour
 
     private void NewWeightSetter(ObjectLocation square)
     {
+        int currentWeight = distanceFromStartArray(square);
+        int possibleNewWeight = currentWeight + MakeWeightToMoveArray(square);
+        if (currentWeight > possibleNewWeight)
+        {
 
+        }
     }
 
     private (int xstart, int ystart) GetChildObject(Transform parent, string _tag)
