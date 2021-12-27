@@ -121,17 +121,20 @@ public class RMapGenorator : MonoBehaviour
 
     private void MakeDistanceFromEndArray(<ObjectLocation> startDoor,<ObjectLocation> endDoor)
     {
-        Queue<ObjectLocation> LocationsToVisit = new Queue<ObjectLocation>();
-        LocationsToVisit.Enqueue(endDoor);
+        Queue<ObjectLocation> locationsToVisit = new Queue<ObjectLocation>();
+        locationsToVisit.Enqueue(endDoor);
         while (locationsToVisit.Count != 0)
         {
-            ObjectLocation currentDoor= LocationsToVisit[0]
-            int xCurrentDoor = currentDoor._x
-            int yCurrentDoor = currentDoor._y
-            ObjectLocation LeftSquare = new ObjectLocation(xCurrentDoor-1, yCurrentDoor, 0)
-            ObjectLocation RightSquare = new ObjectLocation(xCurrentDoor+1, yCurrentDoor, 0)
-            ObjectLocation Forwardsquare = new ObjectLocation(xCurrentDoor, yCurrentDoor+1, 0)
-            ObjectLocation DownSquare = new ObjectLocation(xCurrentDoor, yCurrentDoor-1, 0)
+            ObjectLocation currentPosition = locationsToVisit[0]
+            int xcurrentPosition = currentPosition._x
+            int ycurrentPosition = currentPosition._y
+
+
+            ObjectLocation leftSquare = new ObjectLocation(xcurrentPosition - 1, ycurrentPosition, 0);
+            ObjectLocation rightSquare = new ObjectLocation(xcurrentPosition + 1, ycurrentPosition, 0);
+            ObjectLocation forwardsquare = new ObjectLocation(xcurrentPosition, ycurrentPosition + 1, 0);
+            ObjectLocation downSquare = new ObjectLocation(xcurrentPosition, ycurrentPosition - 1, 0);
+            List<ObjectLocation> adjacentLocations = new List<ObjectLocation>(leftSquare, rightSquare, forwardsquare, downSquare);
         }
     }
 
