@@ -122,9 +122,10 @@ public class RMapGenorator : MonoBehaviour
 
     private void MakeDistanceFromEndArray(<ObjectLocation> startDoor,<ObjectLocation> endDoor)
     {
-        Array
-        Queue<ObjectLocation> locationsToVisit = new Queue<ObjectLocation>();
+        List<ObjectLocation> visited = new List<ObjectLocation>();
+        Queue <ObjectLocation> locationsToVisit = new Queue<ObjectLocation>();
         locationsToVisit.Enqueue(endDoor);
+        locationsToVisit.Add(endDoor);
         while (locationsToVisit.Count != 0)
         {
             int[,] distanceFromStartArray = new int[50, 50];
@@ -132,28 +133,34 @@ public class RMapGenorator : MonoBehaviour
             int xcurrentPosition = currentPosition._x;
             int ycurrentPosition = currentPosition._y;
 
-
             ObjectLocation leftSquare = new ObjectLocation(xcurrentPosition - 1, ycurrentPosition, 0);
             ObjectLocation rightSquare = new ObjectLocation(xcurrentPosition + 1, ycurrentPosition, 0);
             ObjectLocation forwardsquare = new ObjectLocation(xcurrentPosition, ycurrentPosition + 1, 0);
             ObjectLocation downSquare = new ObjectLocation(xcurrentPosition, ycurrentPosition - 1, 0);
             List<ObjectLocation> adjacentLocations = new List<ObjectLocation>(leftSquare, rightSquare, forwardsquare, downSquare);
 
-
             foreach (var square in adjacentLocations)
             {
                 bool contains = distanceFromStartArray.contains(square);
                 if (contains)
                 {
-                    NewWeightSetter();
+                    NewWeightSetter(square);
+
                     if()//in visited = false
                     {
                         locationsToVisit.Enqueue(square);
+                        locationsToVisit.Add(square);
                     }
                     
                 }
             }
+            
         }
+    }
+
+    private void NewWeightSetter(ObjectLocation square)
+    {
+
     }
 
     private (int xstart, int ystart) GetChildObject(Transform parent, string _tag)
