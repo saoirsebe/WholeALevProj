@@ -53,9 +53,10 @@ public class RMapGenorator : MonoBehaviour
                 WeightToMoveArray[x, y] = 1;
             }
         }
+        MakeWeightToMoveArray();
 
         ObjectLocation doorStart = new ObjectLocation(5,3,0);
-        PickEnd(doorStart,maxint);
+        PickEnd(doorStart,maxint, WeightToMoveArray);
 
 
         while (roomsMade==9 & roomsLeft)
@@ -87,7 +88,7 @@ public class RMapGenorator : MonoBehaviour
     }
 
 
-    private void PickEnd(ObjectLocation startDoor, int rand)
+    private void PickEnd(ObjectLocation startDoor, int rand, int[,] WeightToMoveArray)
     {
         int rand2;
         do
@@ -105,7 +106,7 @@ public class RMapGenorator : MonoBehaviour
         bool contains = doorsNotVisited<>.Remove(endDoor)
         if (contains)
         {
-            MakeDistanceFromEndArray(startDoor, endDoor);
+            MakeDistanceFromEndArray(startDoor, endDoor, WeightToMoveArray);
         }
     }
 
@@ -120,15 +121,26 @@ public class RMapGenorator : MonoBehaviour
     }
 
 
-    private void MakeDistanceFromEndArray(<ObjectLocation> startDoor,<ObjectLocation> endDoor)
+    private void MakeDistanceFromEndArray(<ObjectLocation> startDoor,<ObjectLocation> endDoor, int[,] WeightToMoveArray)
     {
         List<ObjectLocation> visited = new List<ObjectLocation>();
         Queue <ObjectLocation> locationsToVisit = new Queue<ObjectLocation>();
         locationsToVisit.Enqueue(endDoor);
         locationsToVisit.Add(endDoor);
+
+        int[,] distanceFromStartArray = new int[50, 50];
+        for (int x = 0; x < 50; x++)
+        {
+            for (int y = 0; y < 50; y++)
+            {
+                distanceFromStartArray[x, y] = maxint;
+            }
+        }
+         
+        
+
         while (locationsToVisit.Count != 0)
         {
-            int[,] distanceFromStartArray = new int[50, 50];
             ObjectLocation currentPosition = locationsToVisit[0];
             int xcurrentPosition = currentPosition._x;
             int ycurrentPosition = currentPosition._y;
@@ -144,7 +156,7 @@ public class RMapGenorator : MonoBehaviour
                 bool contains = distanceFromStartArray.contains(square);
                 if (contains) //if it an actual square in array
                 {
-                    NewWeightSetter(square);
+                    NewWeightSetter(square, currentPosition, WeightToMoveArray);
                     bool hasVisted = visited.Contains(square);
                     if (hasVisted = false)//if it hasnt allready been added to the queue before then add to queue
                     {
@@ -158,13 +170,14 @@ public class RMapGenorator : MonoBehaviour
         }
     }
 
-    private void NewWeightSetter(ObjectLocation square)
+    private void NewWeightSetter(ObjectLocation square, ObjectLocation currentPosition, int[,] WeightToMoveArray)
     {
         int currentWeight = distanceFromStartArray(square);
-        int possibleNewWeight = currentWeight + MakeWeightToMoveArray(square);
+        int prevWeight = distanceFromStartArray(currentPosition);
+        int possibleNewWeight = prevWeight + WeightToMoveArray(square);
         if (currentWeight > possibleNewWeight)
         {
-
+            distanceFromStartArray(square) = possibleNewWeight; //If previous squares weight plus weight to move to this square is less then the weight at the square now then change weight to new weight
         }
     }
 
