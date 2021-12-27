@@ -11,7 +11,7 @@ public class RMapGenorator : MonoBehaviour
     public List<Room> roomsList = new List<Room>();
     public Room Room;
     public List<ObjectLocation> wallsList = new List<ObjectLocation>();
-    private int[,] WeightToMoveArray = new int [50,50];
+    
     private int[,] DistanceFromStartArray = new int[50, 50];
 
     public const int maxint = 2147483647;
@@ -45,6 +45,7 @@ public class RMapGenorator : MonoBehaviour
 
     void Start()
     {
+        int[,] WeightToMoveArray = new int[50, 50];
         for (int x = 0; x < 50; x++)
         {
             for (int y = 0; y < 50; y++)
@@ -121,13 +122,15 @@ public class RMapGenorator : MonoBehaviour
 
     private void MakeDistanceFromEndArray(<ObjectLocation> startDoor,<ObjectLocation> endDoor)
     {
+        Array
         Queue<ObjectLocation> locationsToVisit = new Queue<ObjectLocation>();
         locationsToVisit.Enqueue(endDoor);
         while (locationsToVisit.Count != 0)
         {
-            ObjectLocation currentPosition = locationsToVisit[0]
-            int xcurrentPosition = currentPosition._x
-            int ycurrentPosition = currentPosition._y
+            int[,] distanceFromStartArray = new int[50, 50];
+            ObjectLocation currentPosition = locationsToVisit[0];
+            int xcurrentPosition = currentPosition._x;
+            int ycurrentPosition = currentPosition._y;
 
 
             ObjectLocation leftSquare = new ObjectLocation(xcurrentPosition - 1, ycurrentPosition, 0);
@@ -135,6 +138,21 @@ public class RMapGenorator : MonoBehaviour
             ObjectLocation forwardsquare = new ObjectLocation(xcurrentPosition, ycurrentPosition + 1, 0);
             ObjectLocation downSquare = new ObjectLocation(xcurrentPosition, ycurrentPosition - 1, 0);
             List<ObjectLocation> adjacentLocations = new List<ObjectLocation>(leftSquare, rightSquare, forwardsquare, downSquare);
+
+
+            foreach (var square in adjacentLocations)
+            {
+                bool contains = distanceFromStartArray.contains(square);
+                if (contains)
+                {
+                    NewWeightSetter();
+                    if()//in visited = false
+                    {
+                        locationsToVisit.Enqueue(square);
+                    }
+                    
+                }
+            }
         }
     }
 
