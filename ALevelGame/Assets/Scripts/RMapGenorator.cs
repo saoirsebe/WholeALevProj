@@ -12,10 +12,11 @@ public class RMapGenorator : MonoBehaviour
     public Room Room;
     public List<ObjectLocation> wallsList = new List<ObjectLocation>();
     private int[,] WeightToMoveArray = new int [50,50];
+    private int[,] DistanceFromStartArray = new int[50, 50];
+
     public const int maxint = 2147483647;
     public int roomsMade;
-
-    Queue<ObjectLocation> LocationsToVisit = new Queue<ObjectLocation>();
+    
     private GameObject startRoomObj;
     private Vector3 transPos;
     private int xCoord;
@@ -81,8 +82,6 @@ public class RMapGenorator : MonoBehaviour
             {
                 PickEnd(door, rand);
             }
-                 
-            
         }
     }
 
@@ -107,8 +106,6 @@ public class RMapGenorator : MonoBehaviour
         {
             MakeDistanceFromEndArray(startDoor, endDoor);
         }
-
-        
     }
 
     public void MakeWeightToMoveArray()
@@ -118,14 +115,24 @@ public class RMapGenorator : MonoBehaviour
             int wallx = wall._x;
             int wally = wall._y;
             WeightToMoveArray[wallx, wally] = maxint;
-        }
-        
+        } 
     }
 
 
     private void MakeDistanceFromEndArray(<ObjectLocation> startDoor,<ObjectLocation> endDoor)
     {
-        
+        Queue<ObjectLocation> LocationsToVisit = new Queue<ObjectLocation>();
+        LocationsToVisit.Enqueue(endDoor);
+        while (locationsToVisit.Count != 0)
+        {
+            ObjectLocation currentDoor= LocationsToVisit[0]
+            int xCurrentDoor = currentDoor._x
+            int yCurrentDoor = currentDoor._y
+            ObjectLocation LeftSquare = new ObjectLocation(xCurrentDoor-1, yCurrentDoor, 0)
+            ObjectLocation RightSquare = new ObjectLocation(xCurrentDoor+1, yCurrentDoor, 0)
+            ObjectLocation Forwardsquare = new ObjectLocation(xCurrentDoor, yCurrentDoor+1, 0)
+            ObjectLocation DownSquare = new ObjectLocation(xCurrentDoor, yCurrentDoor-1, 0)
+        }
     }
 
     private (int xstart, int ystart) GetChildObject(Transform parent, string _tag)
