@@ -58,7 +58,8 @@ public class RMapGenorator : MonoBehaviour
 
         while (roomsMade==9 & roomsLeft)
         {
-            PickStart();
+            doorsn,rand = PickStart();
+            DoorsInStart(doorsn, rand);
         }
     }
 
@@ -67,16 +68,21 @@ public class RMapGenorator : MonoBehaviour
         int rand = Random.Range(0, roomsList.Count);
         Room roomSt = roomsList[rand];
         List<ObjectLocation> doorsn = roomSt.doors;
-
-        DoorsInStart(doorsn,rand)
+        return doorsn,rand;
     }
 
     private DoorsInStart(List<ObjectLocation> doorsn, int rand)
     {
         foreach (var door in doorsn)
         {
-            PickEnd(door, rand);
-            //del door
+            //check same as hashset and del correct door
+            bool contains = doorsNotVisited<>.Remove(door)
+            if (contains)
+            {
+                PickEnd(door, rand);
+            }
+                 
+            
         }
     }
 
@@ -96,7 +102,13 @@ public class RMapGenorator : MonoBehaviour
         rand3 = Random.Range(0, doorsn.Count);
         ObjectLocation endDoor = doorsn[rand3];
 
-        MakeDistanceFromEndArray(startDoor, endDoor);
+        bool contains = doorsNotVisited<>.Remove(endDoor)
+        if (contains)
+        {
+            MakeDistanceFromEndArray(startDoor, endDoor);
+        }
+
+        
     }
 
     public void MakeWeightToMoveArray()
