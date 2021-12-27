@@ -145,11 +145,11 @@ public class RMapGenorator : MonoBehaviour
                 if (contains)
                 {
                     NewWeightSetter(square);
-
-                    if()//in visited = false
+                    bool hasVisted = visited.Contains(square);
+                    if (hasVisted = false)//in visited = false
                     {
                         locationsToVisit.Enqueue(square);
-                        locationsToVisit.Add(square);
+                        visited.Add(square);
                     }
                     
                 }
