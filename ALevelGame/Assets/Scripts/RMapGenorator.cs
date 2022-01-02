@@ -78,8 +78,8 @@ public class RMapGenorator : MonoBehaviour
     {
         foreach (var door in doorsn)
         {
-            //check same as hashset and del correct door
-            bool contains = doorsNotVisited<>.Remove(door)
+           
+            bool contains = doorsNotVisited<>.Remove(door)  //returns true if door was in and removed from doorsNotVisited
             if (contains)
             {
                 PickEnd(door, rand);
@@ -94,9 +94,9 @@ public class RMapGenorator : MonoBehaviour
         do
         {
             rand2 = Random.Range(0, roomsList.Count);
-        } while (rand2 == rand);
+        } while (rand2 == rand);                           //While random number is the same as the location of the startRoom in roomsList pick another number
 
-        Room roomSt = roomsList[rand2];
+        Room roomEn = roomsList[rand2];
         List<ObjectLocation> doorsn = roomEn.doors;
 
         int rand3;
@@ -116,18 +116,18 @@ public class RMapGenorator : MonoBehaviour
         {
             int wallx = wall._x;
             int wally = wall._y;
-            WeightToMoveArray[wallx, wally] = maxint;
+            WeightToMoveArray[wallx, wally] = maxint;      //Set locations of walls in array to max int so weight of moving ples prev location will be max and not picked
         } 
     }
 
 
     private void MakeDistanceFromEndArray(<ObjectLocation> startDoor,<ObjectLocation> endDoor, int[,] WeightToMoveArray)
     {
-        List<ObjectLocation> visited = new List<ObjectLocation>();
-        Queue <ObjectLocation> locationsToVisit = new Queue<ObjectLocation>();
+        List<ObjectLocation> visited = new List<ObjectLocation>(); //Change to priority queue so picks smallest distance first?
+        Queue <ObjectLocation> locationsToVisit = new Queue<ObjectLocation>();  
         locationsToVisit.Enqueue(endDoor);
-        locationsToVisit.Add(endDoor);
 
+        
         int[,] distanceFromStartArray = new int[50, 50];
         for (int x = 0; x < 50; x++)
         {
@@ -136,8 +136,8 @@ public class RMapGenorator : MonoBehaviour
                 distanceFromStartArray[x, y] = maxint;
             }
         }
-         
-        
+
+        distanceFromStartArray(startDoor) = 0;//0 so picked
 
         while (locationsToVisit.Count != 0)
         {
