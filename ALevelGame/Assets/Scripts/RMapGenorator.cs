@@ -28,7 +28,7 @@ public class RMapGenorator : MonoBehaviour
     private bool roomsLeft = true;
     private List<ObjectLocation> corridors { get; set; } = new List<ObjectLocation>();
     public HashSet<ObjectLocation> doorsNotVisited = new HashSet<ObjectLocation>();
-    
+    public int[,] WeightToMoveArray = new int[50, 50];
 
     public void AddToRoomsList(Room room)
     {
@@ -45,7 +45,7 @@ public class RMapGenorator : MonoBehaviour
 
     void Start()
     {
-        int[,] WeightToMoveArray = new int[50, 50];
+        
         for (int x = 0; x < 50; x++)
         {
             for (int y = 0; y < 50; y++)
@@ -53,33 +53,38 @@ public class RMapGenorator : MonoBehaviour
                 WeightToMoveArray[x, y] = 1;
             }
         }
-        MakeWeightToMoveArray();
+        foreach (var wall in wallsList)
+        {
+            int wallx = wall._x;
+            int wally = wall._y;
+            WeightToMoveArray[wallx, wally] = maxint;      //Set locations of walls in array to max int so weight of moving ples prev location will be max and not picked
+        }
+        
 
         ObjectLocation doorStart = new ObjectLocation(5,3,0);
-        PickEnd(doorStart,maxint, WeightToMoveArray);
+        PickEnd(doorStart,maxint);
 
 
         while (roomsMade==9 & roomsLeft)
         {
-            doorsn,rand = PickStart();
-            DoorsInStart(doorsn, rand);
+            PickStart();
         }
     }
 
-    private PickStart()
+    private void PickStart()
     {
         int rand = Random.Range(0, roomsList.Count);
         Room roomSt = roomsList[rand];
         List<ObjectLocation> doorsn = roomSt.doors;
-        return doorsn,rand;
+        DoorsInStart(doorsn, rand);
     }
 
-    private DoorsInStart(List<ObjectLocation> doorsn, int rand)
+    private void DoorsInStart(List<ObjectLocation> doorsn, int rand)
     {
         foreach (var door in doorsn)
         {
-           
-            bool contains = doorsNotVisited<>.Remove(door)  //returns true if door was in and removed from doorsNotVisited
+
+            bool contains = doorsNotVisited<>.Remove(door);  //returns true if door was in and removed from doorsNotVisited
             if (contains)
             {
                 PickEnd(door, rand);
@@ -88,7 +93,7 @@ public class RMapGenorator : MonoBehaviour
     }
 
 
-    private void PickEnd(ObjectLocation startDoor, int rand, int[,] WeightToMoveArray)
+    private void PickEnd(ObjectLocation startDoor, int rand)
     {
         int rand2;
         do
@@ -110,15 +115,6 @@ public class RMapGenorator : MonoBehaviour
         }
     }
 
-    public void MakeWeightToMoveArray()
-    {
-        foreach (var wall in wallsList)
-        {
-            int wallx = wall._x;
-            int wally = wall._y;
-            WeightToMoveArray[wallx, wally] = maxint;      //Set locations of walls in array to max int so weight of moving ples prev location will be max and not picked
-        } 
-    }
 
 
     private void MakeDistanceFromEndArray(<ObjectLocation> startDoor,<ObjectLocation> endDoor, int[,] WeightToMoveArray)
@@ -163,7 +159,7 @@ public class RMapGenorator : MonoBehaviour
                 }
             }
 
-            for (var varr in locationsCanVisit)                    //Makes current position the position with the lowest weight
+            foreach (var varr in locationsCanVisit)                    //Makes current position the position with the lowest weight
             {
                 int newCurrentWeight = varr._thisWeight;
                 int thisCurrentWeight = currentPosition._thisWeight;
@@ -177,7 +173,7 @@ public class RMapGenorator : MonoBehaviour
 
             foreach (var element in locationsCanVisit)
             {
-                if(element._thisObject = currentPosition)
+                if(element._thisObject == currentPosition)
                 {
                     locationsCanVisit.Remove(element);
                 }
@@ -199,7 +195,7 @@ public class RMapGenorator : MonoBehaviour
             {
                 foreach (var element in locationsCanVisit)
                 {
-                    if (element._thisObject = square)
+                    if (element._thisObject == square)
                     {
                         locationsCanVisit.Remove(element);
                     }
