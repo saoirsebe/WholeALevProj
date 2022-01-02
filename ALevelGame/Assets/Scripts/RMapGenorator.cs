@@ -174,7 +174,15 @@ public class RMapGenorator : MonoBehaviour
                 }
             }
             perminant.Add(currentPosition);
-            locationsCanVisit.Remove(currentPosition);
+
+            foreach (var element in locationsCanVisit)
+            {
+                if(element._thisObject = currentPosition)
+                {
+                    locationsCanVisit.Remove(element);
+                }
+            }
+            
             
         } while (locationsCanVisit.Count != 0);
     }
@@ -189,8 +197,13 @@ public class RMapGenorator : MonoBehaviour
             distanceFromStartArray(square) = possibleNewWeight; //If previous squares weight plus weight to move to this square is less then the weight at the square now then change weight to new weight
             if (contains == true)
             {
-                PriorityListElement toRemoveCanVisit = new PriorityListElement(square, currentWeight);
-                locationsCanVisit.Remove(toRemoveCanVisit);
+                foreach (var element in locationsCanVisit)
+                {
+                    if (element._thisObject = square)
+                    {
+                        locationsCanVisit.Remove(element);
+                    }
+                }
             }
             PriorityListElement toAddToCanVisit = new PriorityListElement(square, possibleNewWeight);
         }
