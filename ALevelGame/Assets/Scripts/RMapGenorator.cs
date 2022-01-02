@@ -123,8 +123,8 @@ public class RMapGenorator : MonoBehaviour
 
     private void MakeDistanceFromEndArray(<ObjectLocation> startDoor,<ObjectLocation> endDoor, int[,] WeightToMoveArray)
     {
-        List<ObjectLocation> visited = new List<ObjectLocation>(); //Change to priority queue so picks smallest distance first?
-        Queue <ObjectLocation> locationsToVisit = new Queue<ObjectLocation>();  
+        List<ObjectLocation> visited = new List<ObjectLocation>();
+        Queue <ObjectLocation> locationsToVisit = new Queue<ObjectLocation>();  //Change to priority queue so picks smallest distance first?
         locationsToVisit.Enqueue(endDoor);
 
         
@@ -142,6 +142,7 @@ public class RMapGenorator : MonoBehaviour
         while (locationsToVisit.Count != 0)
         {
             ObjectLocation currentPosition = locationsToVisit[0];
+            locationsToVisit.Dequeue();
             int xcurrentPosition = currentPosition._x;
             int ycurrentPosition = currentPosition._y;
 
@@ -166,7 +167,6 @@ public class RMapGenorator : MonoBehaviour
                     
                 }
             }
-            
         }
     }
 
@@ -227,5 +227,16 @@ public class ObjectLocation
     }
 }
 
+public class PriorityListElement
+{ 
+    public ObjectLocation _thisObject;
+    public int _thisWeight;
 
+    public PriorityQueueElement(ObjectLocation thisObject, int thisWeight)
+    {
+        _thisObject = thisObject;
+        _thisWeight = thisWeight;
+    }
+}
 
+//Making class to hold priority and element so lowest _currentWeight can be picked next and need to make into list then check for lowest rather then 0 in queue
