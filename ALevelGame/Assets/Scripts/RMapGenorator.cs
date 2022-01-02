@@ -158,11 +158,12 @@ public class RMapGenorator : MonoBehaviour
                 bool isPerm = perminant.Contains(square);
                 if (contains==true & isPerm==false) //if it an actual square in array
                 {
-                    NewWeightSetter(square, currentPosition, WeightToMoveArray); //changes weight if new weight is smaller then current
+                    int weightOf = NewWeightSetter(square, currentPosition, WeightToMoveArray); //changes weight if new weight is smaller then current
                     bool contains = locationsCanVisit.Contains(square);
                     if (contains==false)
                     {
-                        locationsCanVisit.Add(square);
+                        PriorityListElement toAddToCanVisit = new PriorityListElement(square, weightOf);
+                        locationsCanVisit.Add(toAddToCanVisit);
                     }
                 }
             }
@@ -177,13 +178,14 @@ public class RMapGenorator : MonoBehaviour
                     currentPosition = varr;
                 }
             }
+            toAddTo
             perminant.Add(varr);
             locationsCanVisit.Remove(var);
             
         } while (locationsCanVisit.Count != 0);
     }
 
-    private void NewWeightSetter(ObjectLocation square, ObjectLocation currentPosition, int[,] WeightToMoveArray)
+    private NewWeightSetter(ObjectLocation square, ObjectLocation currentPosition, int[,] WeightToMoveArray)
     {
         int currentWeight = distanceFromStartArray(square);
         int prevWeight = distanceFromStartArray(currentPosition);
@@ -191,7 +193,13 @@ public class RMapGenorator : MonoBehaviour
         if (currentWeight > possibleNewWeight)
         {
             distanceFromStartArray(square) = possibleNewWeight; //If previous squares weight plus weight to move to this square is less then the weight at the square now then change weight to new weight
+            return possibleNewWeight;
         }
+        else
+        {
+            return currentWeight;
+        }
+         
     }
 
     private (int xstart, int ystart) GetChildObject(Transform parent, string _tag)
