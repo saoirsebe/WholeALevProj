@@ -158,13 +158,9 @@ public class RMapGenorator : MonoBehaviour
                 bool isPerm = perminant.Contains(square);
                 if (contains==true & isPerm==false) //if it an actual square in array
                 {
-                    int weightOf = NewWeightSetter(square, currentPosition, WeightToMoveArray); //changes weight if new weight is smaller then current
+                    NewWeightSetter(square, currentPosition, WeightToMoveArray, locationsCanVisit); //changes weight if new weight is smaller then current
                     bool contains = locationsCanVisit.Contains(square);
-                    if (contains==false)
-                    {
-                        PriorityListElement toAddToCanVisit = new PriorityListElement(square, weightOf);
-                        locationsCanVisit.Add(toAddToCanVisit);
-                    }
+                    
                 }
             }
 
@@ -185,7 +181,7 @@ public class RMapGenorator : MonoBehaviour
         } while (locationsCanVisit.Count != 0);
     }
 
-    private NewWeightSetter(ObjectLocation square, ObjectLocation currentPosition, int[,] WeightToMoveArray)
+    private void NewWeightSetter(ObjectLocation square, ObjectLocation currentPosition, int[,] WeightToMoveArray, List<PriorityListElement> locationsCanVisit)
     {
         int currentWeight = distanceFromStartArray(square);
         int prevWeight = distanceFromStartArray(currentPosition);
@@ -193,13 +189,22 @@ public class RMapGenorator : MonoBehaviour
         if (currentWeight > possibleNewWeight)
         {
             distanceFromStartArray(square) = possibleNewWeight; //If previous squares weight plus weight to move to this square is less then the weight at the square now then change weight to new weight
-            return possibleNewWeight;
+            PriorityListElement toAddToCanVisit = new PriorityListElement(square, possibleNewWeight);
+            if (contains == true)
+            {
+                PriorityListElement toRemoveCanVisit = new PriorityListElement(square, currentWeight);
+                locationsCanVisit.Remove(toRemoveCanVisit);
+            }
         }
         else
         {
-            return currentWeight;
+            PriorityListElement toAddToCanVisit = new PriorityListElement(square, currentWeight);  //need to not make new instance ever time if already in 
         }
-         
+        if (contains == false)
+        {
+            locationsCanVisit.Add(toAddToCanVisit);
+        }
+            
     }
 
     private (int xstart, int ystart) GetChildObject(Transform parent, string _tag)
