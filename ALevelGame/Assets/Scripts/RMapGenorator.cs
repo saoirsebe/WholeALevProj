@@ -123,12 +123,11 @@ public class RMapGenorator : MonoBehaviour
 
     private void MakeDistanceFromEndArray(<ObjectLocation> startDoor,<ObjectLocation> endDoor, int[,] WeightToMoveArray)
     {
-        List<ObjectLocation> visited = new List<ObjectLocation>();
-        List<ObjectLocation> locationsToVisit = new List<ObjectLocation>();  //Change to priority queue so picks smallest distance first?
-        endDoorClasInst PriorityListElement = new PriorityListElement(endDoor,endDoor._thisWeight)
-        locationsToVisit.Add(endDoorClasInst);
+        int finalWeightSet = 1;
+        List<PriorityListElement> locationsCanVisit = new List<PriorityListElement>();  //Change to priority queue so picks smallest distance first?
+        List<ObjectLocation> perminant = new List<ObjectLocation>();
 
-        
+
         int[,] distanceFromStartArray = new int[50, 50];
         for (int x = 0; x < 50; x++)
         {
@@ -137,25 +136,13 @@ public class RMapGenorator : MonoBehaviour
                 distanceFromStartArray[x, y] = maxint;
             }
         }
+        distanceFromStartArray(endDoor) = 0;
+        perminant.Add(endDoor);
+        ObjectLocation currentPosition = endDoor;
 
-        distanceFromStartArray(startDoor) = 0;//0 so picked
 
-        while (locationsToVisit.Count != 0)
+        do
         {
-            ObjectLocation currentPosition = locationsToVisit[0];
-            for (var var in locationsToVisit)                             //Makes current position the position with the lowest weight
-            {
-                int newCurrentWeight = var._thisWeight;
-                int thisCurrentWeight = currentPosition._thisWeight;
-
-                if (newCurrentWeight < thisCurrentWeight)
-                {
-                    currentPosition = var;
-                }
-            }
-
-           
-            locationsToVisit.Delete();
             int xcurrentPosition = currentPosition._x;
             int ycurrentPosition = currentPosition._y;
 
@@ -165,22 +152,35 @@ public class RMapGenorator : MonoBehaviour
             ObjectLocation downSquare = new ObjectLocation(xcurrentPosition, ycurrentPosition - 1, 0);
             List<ObjectLocation> adjacentLocations = new List<ObjectLocation>(leftSquare, rightSquare, forwardsquare, downSquare);
 
-            foreach (var square in adjacentLocations) //for each adjacentLocation 
+            foreach (var square in adjacentLocations)
             {
                 bool contains = distanceFromStartArray.contains(square);
-                if (contains) //if it an actual square in array
+                bool isPerm = perminant.Contains(square);
+                if (contains==true & isPerm==false) //if it an actual square in array
                 {
-                    NewWeightSetter(square, currentPosition, WeightToMoveArray);
-                    bool hasVisted = visited.Contains(square);
-                    if (hasVisted = false)//if it hasnt allready been added to the queue before then add to queue
+                    NewWeightSetter(square, currentPosition, WeightToMoveArray); //changes weight if new weight is smaller then current
+                    bool contains = locationsCanVisit.Contains(square);
+                    if (contains==false)
                     {
-                        locationsToVisit.Enqueue(square);
-                        visited.Add(square);
+                        locationsCanVisit.Add(square);
                     }
-                    
                 }
             }
-        }
+
+            for (var varr in locationsCanVisit)                    //Makes current position the position with the lowest weight
+            {
+                int newCurrentWeight = varr._thisWeight;
+                int thisCurrentWeight = currentPosition._thisWeight;
+
+                if (newCurrentWeight < thisCurrentWeight)
+                {
+                    currentPosition = varr;
+                }
+            }
+            perminant.Add(varr);
+            locationsCanVisit.Remove(var);
+            
+        } while (locationsCanVisit.Count != 0);
     }
 
     private void NewWeightSetter(ObjectLocation square, ObjectLocation currentPosition, int[,] WeightToMoveArray)
@@ -245,7 +245,7 @@ public class PriorityListElement
     public ObjectLocation _thisObject;
     public int _thisWeight;
 
-    public PriorityQueueElement(ObjectLocation thisObject, int thisWeight)
+    public PriorityQueueElement(ObjectLocation thisObject, int thisWeight, string status)
     {
         _thisObject = thisObject;
         _thisWeight = thisWeight;
