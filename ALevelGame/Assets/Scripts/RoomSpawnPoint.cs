@@ -78,7 +78,7 @@ public class RoomSpawnPoint : MonoBehaviour
             }
             if (tagg == "Door")
             {
-                doorsNotVisited.Add(newobj)
+                doorsNotVisited.Add(newobj);
             }
         }
         return listToAdd;

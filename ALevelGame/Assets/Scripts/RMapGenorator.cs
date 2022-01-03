@@ -57,9 +57,8 @@ public class RMapGenorator : MonoBehaviour
         {
             int wallx = wall._x;
             int wally = wall._y;
-            WeightToMoveArray[wallx, wally] = maxint;      //Set locations of walls in array to max int so weight of moving ples prev location will be max and not picked
+            WeightToMoveArray[wallx, wally] = maxint; //Set locations of walls in array to max int so weight of moving ples prev location will be max and not picked
         }
-        
 
         ObjectLocation doorStart = new ObjectLocation(5,3,0);
         PickEnd(doorStart,maxint);
@@ -108,16 +107,16 @@ public class RMapGenorator : MonoBehaviour
         rand3 = Random.Range(0, doorsn.Count);
         ObjectLocation endDoor = doorsn[rand3];
 
-        bool contains = doorsNotVisited<>.Remove(endDoor)
+        bool contains = doorsNotVisited.Remove(endDoor);
         if (contains)
         {
-            MakeDistanceFromEndArray(startDoor, endDoor, WeightToMoveArray);
+            MakeDistanceFromEndArray(startDoor, endDoor);
         }
     }
 
 
 
-    private void MakeDistanceFromEndArray(<ObjectLocation> startDoor,<ObjectLocation> endDoor, int[,] WeightToMoveArray)
+    private void MakeDistanceFromEndArray(ObjectLocation startDoor,ObjectLocation endDoor)
     {
         int finalWeightSet = 1;
         List<PriorityListElement> locationsCanVisit = new List<PriorityListElement>();  //Change to priority queue so picks smallest distance first?
@@ -150,23 +149,29 @@ public class RMapGenorator : MonoBehaviour
 
             foreach (var square in adjacentLocations)
             {
-                bool contains = distanceFromStartArray.contains(square);
+                bool contains = false;
+                if (-1<square._x<51 & -1<square._y<51)
+                {
+                    contains = true;
+                }
+
+                
                 bool isPerm = perminant.Contains(square);
                 if (contains==true & isPerm==false) //if it an actual square in array
                 {
                     bool contains = locationsCanVisit.Contains(square);
-                    NewWeightSetter(square, currentPosition, WeightToMoveArray, locationsCanVisit, contains); //changes weight if new weight is smaller then current
+                    NewWeightSetter(square, currentPosition, locationsCanVisit, contains); //changes weight if new weight is smaller then current
                 }
             }
 
-            foreach (var varr in locationsCanVisit)                    //Makes current position the position with the lowest weight
+            foreach (var varr in locationsCanVisit)   //Makes current position the position with the lowest weight
             {
                 int newCurrentWeight = varr._thisWeight;
                 int thisCurrentWeight = currentPosition._thisWeight;
 
                 if (newCurrentWeight < thisCurrentWeight)
                 {
-                    currentPosition = varr;
+                    currentPosition = varr._thisObject; //doesnt work not same
                 }
             }
             perminant.Add(currentPosition);
@@ -179,11 +184,10 @@ public class RMapGenorator : MonoBehaviour
                 }
             }
             
-            
         } while (locationsCanVisit.Count != 0);
     }
 
-    private void NewWeightSetter(ObjectLocation square, ObjectLocation currentPosition, int[,] WeightToMoveArray, List<PriorityListElement> locationsCanVisit, bool contains)
+    private void NewWeightSetter(ObjectLocation square, ObjectLocation currentPosition, List<PriorityListElement> locationsCanVisit, bool contains)
     {
         int currentWeight = distanceFromStartArray(square);
         int prevWeight = distanceFromStartArray(currentPosition);
@@ -214,7 +218,7 @@ public class RMapGenorator : MonoBehaviour
             
     }
 
-    private (int xstart, int ystart) GetChildObject(Transform parent, string _tag)
+    /*private (int xstart, int ystart) GetChildObject(Transform parent, string _tag)
     {
         for (int i = 0; i < parent.childCount; i++) //for each child of start room, if game tag == "Door" then return x and y coordinates
         {
@@ -228,7 +232,7 @@ public class RMapGenorator : MonoBehaviour
             }
         }
         return (xCoord, yCoord);
-    }
+    }*/
 }
 
 public class Room
@@ -265,7 +269,7 @@ public class PriorityListElement
     public ObjectLocation _thisObject;
     public int _thisWeight;
 
-    public PriorityQueueElement(ObjectLocation thisObject, int thisWeight, string status)
+    public PriorityQueueElement(ObjectLocation thisObject, int thisWeight)
     {
         _thisObject = thisObject;
         _thisWeight = thisWeight;
