@@ -201,29 +201,24 @@ public class RMapGenorator : MonoBehaviour
         int yVal = squareObj._y;
         int currentWeight = distanceFromStartArray[xVal,yVal];
         int prevWeight = distanceFromStartArray(currentPosition);
-        int possibleNewWeight = prevWeight + WeightToMoveArray(square);
+        int possibleNewWeight = prevWeight + WeightToMoveArray[xVal, yVal];
         if (currentWeight > possibleNewWeight)
         {
             distanceFromStartArray[xVal,yVal] = possibleNewWeight; //If previous squares weight plus weight to move to this square is less then the weight at the square now then change weight to new weight
-            if (contains == true)
+            foreach (var element in locationsCanVisit)
             {
-                foreach (var element in locationsCanVisit)
+                if (element == square)
                 {
-                    if (element._thisObject = square)
-                    {
-                        locationsCanVisit.Remove(element);
-                    }
+                    locationsCanVisit.Remove(element);
                 }
+                square._thisWeight = possibleNewWeight;
+                locationsCanVisit.Add(square);
             }
-            PriorityListElement toAddToCanVisit = new PriorityListElement(square, possibleNewWeight);
         }
-        else
-        {
-            PriorityListElement toAddToCanVisit = new PriorityListElement(square, currentWeight);  //need to not make new instance ever time if already in 
-        }
+        
         if (contains == false)
         {
-            locationsCanVisit.Add(toAddToCanVisit);
+            locationsCanVisit.Add(square);
         }
             
     }
