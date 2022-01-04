@@ -11,20 +11,9 @@ public class RMapGenorator : MonoBehaviour
     public List<Room> roomsList = new List<Room>();
     public Room Room;
     public List<ObjectLocation> wallsList = new List<ObjectLocation>();
-    
-    private int[,] DistanceFromStartArray = new int[50, 50];
 
     public const int maxint = 2147483647;
     public int roomsMade;
-    
-   /* private GameObject startRoomObj;
-    private Vector3 transPos;
-    private int xCoord;
-    private int yCoord;
-    private int xstart;
-    private int ystart;
-    private int xend;
-    private int yend;*/
     private bool roomsLeft = true;
     private List<ObjectLocation> corridors { get; set; } = new List<ObjectLocation>();
     public HashSet<ObjectLocation> doorsNotVisited = new HashSet<ObjectLocation>();
@@ -98,7 +87,7 @@ public class RMapGenorator : MonoBehaviour
         do
         {
             rand2 = Random.Range(0, roomsList.Count);
-        } while (rand2 == rand);                           //While random number is the same as the location of the startRoom in roomsList pick another number
+        } while (rand2 == rand);                 //While random number is the same as the location of the startRoom in roomsList pick another number
 
         Room roomEn = roomsList[rand2];
         List<ObjectLocation> doorsn = roomEn.doors;
@@ -118,7 +107,7 @@ public class RMapGenorator : MonoBehaviour
 
     private void MakeDistanceFromEndArray(ObjectLocation startDoor,ObjectLocation endDoor)
     {
-        List<PriorityListElement> locationsCanVisit = new List<PriorityListElement>();  //Change to priority queue so picks smallest distance first?
+        List<PriorityListElement> locationsCanVisit = new List<PriorityListElement>(); 
         List<ObjectLocation> perminant = new List<ObjectLocation>();
 
 
@@ -164,7 +153,7 @@ public class RMapGenorator : MonoBehaviour
 
                 
                 bool isPerm = perminant.Contains(squareObj);
-                if (contains==true & isPerm==false) //if it an actual square in array
+                if (contains==true & isPerm==false) //if it an actual square in array and not perminant/visited
                 {
                     bool contains1 = locationsCanVisit.Contains(square);
                     NewWeightSetter(square, currentPosition, locationsCanVisit, contains1, distanceFromStartArray); //changes weight if new weight is smaller then current
@@ -178,7 +167,7 @@ public class RMapGenorator : MonoBehaviour
 
                 if (newCurrentWeight < thisCurrentWeight)
                 {
-                    currentPosition = varr; //doesnt work not same
+                    currentPosition = varr; 
                 }
             }
             perminant.Add(currentPosition._thisObject);
@@ -222,21 +211,7 @@ public class RMapGenorator : MonoBehaviour
             
     }
 
-    /*private (int xstart, int ystart) GetChildObject(Transform parent, string _tag)
-    {
-        for (int i = 0; i < parent.childCount; i++) //for each child of start room, if game tag == "Door" then return x and y coordinates
-        {
-            Transform childx = parent.GetChild(i);
-            string tagg = childx.tag;
-            if (tagg == _tag)
-            {
-                transPos = childx.position;
-                xCoord = (int)transPos.x;
-                yCoord = (int)transPos.y;
-            }
-        }
-        return (xCoord, yCoord);
-    }*/
+    
 }
 
 public class Room
@@ -280,4 +255,4 @@ public class PriorityListElement
     }
 }
 
-//CUrrent position must be priority list element, mix of priority queue elements and objectLocations is messyy!
+//Must run after walls added to list/roomSpawnPointIsDone

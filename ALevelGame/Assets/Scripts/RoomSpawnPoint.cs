@@ -44,7 +44,6 @@ public class RoomSpawnPoint : MonoBehaviour
             List<ObjectLocation> walls = new List<ObjectLocation>();
             walls = FindObjectswithTag(searchTagWallTile, obj, walls);//Adds Wall location of each Wall to the list walls
             s11.AddToWallsList(walls);//Adds wall tiles in walls to total wallsList
-            s11.MakeWeightToMoveArray();
             s11.roomsMade += 1;
         }
         
