@@ -83,7 +83,7 @@ public class RMapGenorator : MonoBehaviour
         foreach (var door in doorsn)
         {
 
-            bool contains = doorsNotVisited<>.Remove(door);  //returns true if door was in and removed from doorsNotVisited
+            bool contains = doorsNotVisited.Remove(door);  //returns true if door was in and removed from doorsNotVisited
             if (contains)
             {
                 PickEnd(door, rand);
@@ -131,7 +131,9 @@ public class RMapGenorator : MonoBehaviour
                 distanceFromStartArray[x, y] = maxint;
             }
         }
-        distanceFromStartArray(endDoor) = 0;
+        int xSet = endDoor._x;
+        int ySet = endDoor._y;
+        distanceFromStartArray[xSet,ySet] = 0;
         perminant.Add(endDoor);
         ObjectLocation currentPosition = endDoor;
 
@@ -145,12 +147,12 @@ public class RMapGenorator : MonoBehaviour
             ObjectLocation rightSquare = new ObjectLocation(xcurrentPosition + 1, ycurrentPosition, 0);
             ObjectLocation forwardsquare = new ObjectLocation(xcurrentPosition, ycurrentPosition + 1, 0);
             ObjectLocation downSquare = new ObjectLocation(xcurrentPosition, ycurrentPosition - 1, 0);
-            List<ObjectLocation> adjacentLocations = new List<ObjectLocation>(leftSquare, rightSquare, forwardsquare, downSquare);
+            List<ObjectLocation> adjacentLocations = new List<ObjectLocation> { leftSquare, rightSquare, forwardsquare, downSquare };
 
             foreach (var square in adjacentLocations)
             {
                 bool contains = false;
-                if (-1<square._x<51 & -1<square._y<51)
+                if (-1<square._x & square._x < 51 & -1<square._y & square._y < 51) //if in array
                 {
                     contains = true;
                 }
@@ -159,8 +161,8 @@ public class RMapGenorator : MonoBehaviour
                 bool isPerm = perminant.Contains(square);
                 if (contains==true & isPerm==false) //if it an actual square in array
                 {
-                    bool contains = locationsCanVisit.Contains(square);
-                    NewWeightSetter(square, currentPosition, locationsCanVisit, contains); //changes weight if new weight is smaller then current
+                    bool contains1 = locationsCanVisit.Contains(square);
+                    NewWeightSetter(square, currentPosition, locationsCanVisit, contains1); //changes weight if new weight is smaller then current
                 }
             }
 
