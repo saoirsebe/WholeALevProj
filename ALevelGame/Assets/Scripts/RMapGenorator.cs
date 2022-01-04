@@ -134,13 +134,13 @@ public class RMapGenorator : MonoBehaviour
         int ySet = endDoor._y;
         distanceFromStartArray[xSet,ySet] = 0;
         perminant.Add(endDoor);
-        ObjectLocation currentPosition = endDoor;
+        PriorityListElement currentPosition = new PriorityListElement(endDoor, maxint);
 
 
         do
         {
-            int xcurrentPosition = currentPosition._x;
-            int ycurrentPosition = currentPosition._y;
+            int xcurrentPosition = endDoor._x;
+            int ycurrentPosition = endDoor._y;
 
             ObjectLocation leftSquareObj = new ObjectLocation(xcurrentPosition - 1, ycurrentPosition, 0);
             PriorityListElement leftSquare = new PriorityListElement(leftSquareObj, distanceFromStartArray[xcurrentPosition - 1, ycurrentPosition]);
@@ -178,14 +178,14 @@ public class RMapGenorator : MonoBehaviour
 
                 if (newCurrentWeight < thisCurrentWeight)
                 {
-                    currentPosition = varr._thisObject; //doesnt work not same
+                    currentPosition = varr; //doesnt work not same
                 }
             }
-            perminant.Add(currentPosition);
+            perminant.Add(currentPosition._thisObject);
 
             foreach (var element in locationsCanVisit)
             {
-                if(element._thisObject == currentPosition)
+                if(element == currentPosition)
                 {
                     locationsCanVisit.Remove(element);
                 }
@@ -194,20 +194,19 @@ public class RMapGenorator : MonoBehaviour
         } while (locationsCanVisit.Count != 0);
     }
 
-    private void NewWeightSetter(PriorityListElement square, ObjectLocation currentPosition, List<PriorityListElement> locationsCanVisit, bool contains, int[,] distanceFromStartArray)
+    private void NewWeightSetter(PriorityListElement square, PriorityListElement currentPosition, List<PriorityListElement> locationsCanVisit, bool contains, int[,] distanceFromStartArray)
     {
         ObjectLocation squareObj = square._thisObject;
-        int xVal = squareObj._x;
-        int yVal = squareObj._y;
-        int currentWeight = distanceFromStartArray[xVal,yVal];
-        int prevWeight = distanceFromStartArray(currentPosition);
-        int possibleNewWeight = prevWeight + WeightToMoveArray[xVal, yVal];
+        int currentWeight = distanceFromStartArray[squareObj._x, squareObj._y];
+        ObjectLocation currentPositionObj = currentPosition._thisObject;
+        int prevWeight = distanceFromStartArray[currentPositionObj._x, currentPositionObj._y];
+        int possibleNewWeight = prevWeight + WeightToMoveArray[squareObj._x, squareObj._y];
         if (currentWeight > possibleNewWeight)
         {
-            distanceFromStartArray[xVal,yVal] = possibleNewWeight; //If previous squares weight plus weight to move to this square is less then the weight at the square now then change weight to new weight
+            distanceFromStartArray[squareObj._x, squareObj._y] = possibleNewWeight; //If previous squares weight plus weight to move to this square is less then the weight at the square now then change weight to new weight
             foreach (var element in locationsCanVisit)
             {
-                if (element == square)
+                if (element == square)  //finds the square un LocationsCanVisit and removis it so new updated weight verion can be added
                 {
                     locationsCanVisit.Remove(element);
                 }
