@@ -118,7 +118,6 @@ public class RMapGenorator : MonoBehaviour
 
     private void MakeDistanceFromEndArray(ObjectLocation startDoor,ObjectLocation endDoor)
     {
-        int finalWeightSet = 1;
         List<PriorityListElement> locationsCanVisit = new List<PriorityListElement>();  //Change to priority queue so picks smallest distance first?
         List<ObjectLocation> perminant = new List<ObjectLocation>();
 
@@ -143,26 +142,32 @@ public class RMapGenorator : MonoBehaviour
             int xcurrentPosition = currentPosition._x;
             int ycurrentPosition = currentPosition._y;
 
-            ObjectLocation leftSquare = new ObjectLocation(xcurrentPosition - 1, ycurrentPosition, 0);
-            ObjectLocation rightSquare = new ObjectLocation(xcurrentPosition + 1, ycurrentPosition, 0);
-            ObjectLocation forwardsquare = new ObjectLocation(xcurrentPosition, ycurrentPosition + 1, 0);
-            ObjectLocation downSquare = new ObjectLocation(xcurrentPosition, ycurrentPosition - 1, 0);
-            List<ObjectLocation> adjacentLocations = new List<ObjectLocation> { leftSquare, rightSquare, forwardsquare, downSquare };
+            ObjectLocation leftSquareObj = new ObjectLocation(xcurrentPosition - 1, ycurrentPosition, 0);
+            PriorityListElement leftSquare = new PriorityListElement(leftSquareObj, distanceFromStartArray[xcurrentPosition - 1, ycurrentPosition]);
+            ObjectLocation rightSquareObj = new ObjectLocation(xcurrentPosition + 1, ycurrentPosition, 0);
+            PriorityListElement rightSquare = new PriorityListElement(rightSquareObj, distanceFromStartArray[xcurrentPosition + 1, ycurrentPosition]);
+            ObjectLocation forwardsquareObj = new ObjectLocation(xcurrentPosition, ycurrentPosition + 1, 0);
+            PriorityListElement forwardsquare = new PriorityListElement(forwardsquareObj, distanceFromStartArray[xcurrentPosition, ycurrentPosition+1]);
+            ObjectLocation downSquareObj = new ObjectLocation(xcurrentPosition, ycurrentPosition - 1, 0);
+            PriorityListElement downSquare = new PriorityListElement(downSquareObj, distanceFromStartArray[xcurrentPosition, ycurrentPosition - 1]);
+
+            List<PriorityListElement> adjacentLocations = new List<PriorityListElement> { leftSquare, rightSquare, forwardsquare, downSquare };
 
             foreach (var square in adjacentLocations)
             {
                 bool contains = false;
-                if (-1<square._x & square._x < 51 & -1<square._y & square._y < 51) //if in array
+                ObjectLocation squareObj = square._thisObject;
+                if (-1< squareObj._x & squareObj._x < 51 & -1< squareObj._y & squareObj._y < 51) //if in array
                 {
                     contains = true;
                 }
 
                 
-                bool isPerm = perminant.Contains(square);
+                bool isPerm = perminant.Contains(squareObj);
                 if (contains==true & isPerm==false) //if it an actual square in array
                 {
                     bool contains1 = locationsCanVisit.Contains(square);
-                    NewWeightSetter(square, currentPosition, locationsCanVisit, contains1); //changes weight if new weight is smaller then current
+                    NewWeightSetter(square, currentPosition, locationsCanVisit, contains1, distanceFromStartArray); //changes weight if new weight is smaller then current
                 }
             }
 
@@ -189,19 +194,22 @@ public class RMapGenorator : MonoBehaviour
         } while (locationsCanVisit.Count != 0);
     }
 
-    private void NewWeightSetter(ObjectLocation square, ObjectLocation currentPosition, List<PriorityListElement> locationsCanVisit, bool contains)
+    private void NewWeightSetter(PriorityListElement square, ObjectLocation currentPosition, List<PriorityListElement> locationsCanVisit, bool contains, int[,] distanceFromStartArray)
     {
-        int currentWeight = distanceFromStartArray(square);
+        ObjectLocation squareObj = square._thisObject;
+        int xVal = squareObj._x;
+        int yVal = squareObj._y;
+        int currentWeight = distanceFromStartArray[xVal,yVal];
         int prevWeight = distanceFromStartArray(currentPosition);
         int possibleNewWeight = prevWeight + WeightToMoveArray(square);
         if (currentWeight > possibleNewWeight)
         {
-            distanceFromStartArray(square) = possibleNewWeight; //If previous squares weight plus weight to move to this square is less then the weight at the square now then change weight to new weight
+            distanceFromStartArray[xVal,yVal] = possibleNewWeight; //If previous squares weight plus weight to move to this square is less then the weight at the square now then change weight to new weight
             if (contains == true)
             {
                 foreach (var element in locationsCanVisit)
                 {
-                    if (element._thisObject == square)
+                    if (element._thisObject = square)
                     {
                         locationsCanVisit.Remove(element);
                     }
@@ -278,4 +286,4 @@ public class PriorityListElement
     }
 }
 
-//Making class to hold priority and element so lowest _currentWeight can be picked next and need to make into list then check for lowest rather then 0 in queue
+//CUrrent position must be priority list element, mix of priority queue elements and objectLocations is messyy!
