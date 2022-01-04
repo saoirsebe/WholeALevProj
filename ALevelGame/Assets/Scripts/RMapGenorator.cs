@@ -273,7 +273,7 @@ public class PriorityListElement
     public ObjectLocation _thisObject;
     public int _thisWeight;
 
-    public PriorityQueueElement(ObjectLocation thisObject, int thisWeight)
+    public PriorityListElement(ObjectLocation thisObject, int thisWeight)
     {
         _thisObject = thisObject;
         _thisWeight = thisWeight;
