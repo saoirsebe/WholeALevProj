@@ -58,7 +58,7 @@ public class RoomSpawnPoint : MonoBehaviour
  
     }
 
-    private List<ObjectLocation> GetChildObject(Transform parent, string _tag, List<ObjectLocation> listToAdd, HashSet<ObjectLocation> doorsNotVisited)
+    private List<ObjectLocation> GetChildObject(Transform parent, string _tag, List<ObjectLocation> listToAdd)
     {
         for(int i = 0; i < parent.childCount; i++) //for each child of current room, if game tag == "Door" then add x and y coordinates to the list doors
         {
@@ -71,13 +71,10 @@ public class RoomSpawnPoint : MonoBehaviour
                 xCoord = (int)transPos.x;
                 yCoord = (int)transPos.y;
 
-                newobj = new ObjectLocation(xCoord, yCoord, 0);
+                ObjectLocation newobj = new ObjectLocation(xCoord, yCoord, 0);
                 listToAdd.Add(newobj);
             }
-            if (tagg == "Door")
-            {
-                doorsNotVisited.Add(newobj);
-            }
+            
         }
         return listToAdd;
     }
