@@ -17,7 +17,8 @@ public class RMapGenorator : MonoBehaviour
     private bool roomsLeft = true;
     private List<ObjectLocation> corridors { get; set; } = new List<ObjectLocation>();
     public HashSet<ObjectLocation> doorsNotVisited = new HashSet<ObjectLocation>();
-    public int[,] WeightToMoveArray = new int[50, 50];
+    static int ArrayMax = 50;
+    public int[,] WeightToMoveArray = new int[ArrayMax, ArrayMax];
 
     public void AddToRoomsList(Room room)
     {
@@ -35,9 +36,9 @@ public class RMapGenorator : MonoBehaviour
     void Start()
     {
         
-        for (int x = 0; x < 50; x++)
+        for (int x = 0; x < ArrayMax; x++)
         {
-            for (int y = 0; y < 50; y++)
+            for (int y = 0; y < ArrayMax; y++)
             {
                 WeightToMoveArray[x, y] = 1;
             }
@@ -111,10 +112,10 @@ public class RMapGenorator : MonoBehaviour
         List<ObjectLocation> perminant = new List<ObjectLocation>();
 
 
-        int[,] distanceFromStartArray = new int[50, 50];
-        for (int x = 0; x < 50; x++)
+        int[,] distanceFromStartArray = new int[ArrayMax, ArrayMax];
+        for (int x = 0; x < ArrayMax; x++)
         {
-            for (int y = 0; y < 50; y++)
+            for (int y = 0; y < ArrayMax; y++)
             {
                 distanceFromStartArray[x, y] = maxint;
             }
@@ -146,7 +147,7 @@ public class RMapGenorator : MonoBehaviour
             {
                 bool contains = false;
                 ObjectLocation squareObj = square._thisObject;
-                if (-1< squareObj._x & squareObj._x < 51 & -1< squareObj._y & squareObj._y < 51) //if in array
+                if (-1< squareObj._x & squareObj._x <= ArrayMax & -1< squareObj._y & squareObj._y <= ArrayMax) //if in array
                 {
                     contains = true;
                 }
@@ -256,3 +257,4 @@ public class PriorityListElement
 }
 
 //Must run after walls added to list/roomSpawnPointIsDone
+//solution is ALevel Game "C:\Users\saoir\Documents\Unity\A Level Game\WholeALevProj\ALevelGame\ALevelGame.sln"
