@@ -17,14 +17,14 @@ public class RMapGenorator : MonoBehaviour
     public const int maxint = 2147483647;
     public int roomsMade;
     
-    private GameObject startRoomObj;
+   /* private GameObject startRoomObj;
     private Vector3 transPos;
     private int xCoord;
     private int yCoord;
     private int xstart;
     private int ystart;
     private int xend;
-    private int yend;
+    private int yend;*/
     private bool roomsLeft = true;
     private List<ObjectLocation> corridors { get; set; } = new List<ObjectLocation>();
     public HashSet<ObjectLocation> doorsNotVisited = new HashSet<ObjectLocation>();
