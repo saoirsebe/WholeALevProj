@@ -15,9 +15,9 @@ public class RMapGenorator : MonoBehaviour
     public const int maxint = 2147483647;
     public int roomsMade;
     private bool roomsLeft = true;
-    private List<ObjectLocation> corridors { get; set; } = new List<ObjectLocation>();
+    private List<Vector2Int> corridors { get; set; } = new List<Vector2Int>();
     public HashSet<ObjectLocation> doorsNotVisited = new HashSet<ObjectLocation>();
-    static int ArrayMax = 50;
+    static int ArrayMax = 100;
     public int[,] WeightToMoveArray = new int[ArrayMax, ArrayMax];
 
     public void AddToRoomsList(Room room)
@@ -54,10 +54,14 @@ public class RMapGenorator : MonoBehaviour
         PickEnd(doorStart,maxint);
 
 
-        while (roomsMade==9 & roomsLeft)
+        while (roomsMade==3 & roomsLeft)
         {
             PickStart();
+            
         }
+
+        
+
     }
 
     private void PickStart()
@@ -129,19 +133,7 @@ public class RMapGenorator : MonoBehaviour
 
         do
         {
-            int xcurrentPosition = endDoor._x;
-            int ycurrentPosition = endDoor._y;
-
-            ObjectLocation leftSquareObj = new ObjectLocation(xcurrentPosition - 1, ycurrentPosition, 0);
-            PriorityListElement leftSquare = new PriorityListElement(leftSquareObj, distanceFromStartArray[xcurrentPosition - 1, ycurrentPosition]);
-            ObjectLocation rightSquareObj = new ObjectLocation(xcurrentPosition + 1, ycurrentPosition, 0);
-            PriorityListElement rightSquare = new PriorityListElement(rightSquareObj, distanceFromStartArray[xcurrentPosition + 1, ycurrentPosition]);
-            ObjectLocation forwardsquareObj = new ObjectLocation(xcurrentPosition, ycurrentPosition + 1, 0);
-            PriorityListElement forwardsquare = new PriorityListElement(forwardsquareObj, distanceFromStartArray[xcurrentPosition, ycurrentPosition+1]);
-            ObjectLocation downSquareObj = new ObjectLocation(xcurrentPosition, ycurrentPosition - 1, 0);
-            PriorityListElement downSquare = new PriorityListElement(downSquareObj, distanceFromStartArray[xcurrentPosition, ycurrentPosition - 1]);
-
-            List<PriorityListElement> adjacentLocations = new List<PriorityListElement> { leftSquare, rightSquare, forwardsquare, downSquare };
+            List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, endDoor);
 
             foreach (var square in adjacentLocations)
             {
@@ -182,6 +174,24 @@ public class RMapGenorator : MonoBehaviour
             }
             
         } while (locationsCanVisit.Count != 0);
+        FindShortestPath(distanceFromStartArray, startDoor);
+    }
+    private List<PriorityListElement> FindSurrounding(int[,] distanceFromStartArray, ObjectLocation MiddleDoor)
+    {
+        int xcurrentPosition = MiddleDoor._x;
+        int ycurrentPosition = MiddleDoor._y;
+
+        ObjectLocation leftSquareObj = new ObjectLocation(xcurrentPosition - 1, ycurrentPosition, 0);
+        PriorityListElement leftSquare = new PriorityListElement(leftSquareObj, distanceFromStartArray[xcurrentPosition - 1, ycurrentPosition]);
+        ObjectLocation rightSquareObj = new ObjectLocation(xcurrentPosition + 1, ycurrentPosition, 0);
+        PriorityListElement rightSquare = new PriorityListElement(rightSquareObj, distanceFromStartArray[xcurrentPosition + 1, ycurrentPosition]);
+        ObjectLocation forwardsquareObj = new ObjectLocation(xcurrentPosition, ycurrentPosition + 1, 0);
+        PriorityListElement forwardsquare = new PriorityListElement(forwardsquareObj, distanceFromStartArray[xcurrentPosition, ycurrentPosition + 1]);
+        ObjectLocation downSquareObj = new ObjectLocation(xcurrentPosition, ycurrentPosition - 1, 0);
+        PriorityListElement downSquare = new PriorityListElement(downSquareObj, distanceFromStartArray[xcurrentPosition, ycurrentPosition - 1]);
+
+        List<PriorityListElement> adjacentLocations = new List<PriorityListElement> { leftSquare, rightSquare, forwardsquare, downSquare };
+        return adjacentLocations;
     }
 
     private void NewWeightSetter(PriorityListElement square, PriorityListElement currentPosition, List<PriorityListElement> locationsCanVisit, bool contains, int[,] distanceFromStartArray)
@@ -212,8 +222,35 @@ public class RMapGenorator : MonoBehaviour
             
     }
 
-    
+    private void FindShortestPath(int[,] distanceFromStartArray, ObjectLocation startDoor)
+    {
+        bool madeShortestPath = false;
+        ObjectLocation thisDoor = startDoor;
+
+        while (madeShortestPath ==false)
+        {
+            List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, thisDoor);
+            int nextWeight = maxint;
+            ObjectLocation nextSquare;
+            foreach (var square in adjacentLocations)
+            {
+                ObjectLocation squareObj = square._thisObject;
+                int squareWeight = square._thisWeight;
+                if (squareWeight<nextWeight)
+                {
+                    nextWeight = squareWeight;
+                    nextSquare = squareObj;
+                }
+
+            }
+        }
+        
+
+        
+    }
 }
+
+
 
 public class Room
 {
