@@ -76,7 +76,6 @@ public class RMapGenorator : MonoBehaviour
         {
             foreach (var door in doorsn)
             {
-
                 bool contains = doorsNotVisited.Remove(door);  //returns true if door was in and removed from doorsNotVisited
                 if (contains)
                 {
@@ -84,7 +83,6 @@ public class RMapGenorator : MonoBehaviour
                 }
             }
         }
-        
     }
 
 
@@ -167,12 +165,18 @@ public class RMapGenorator : MonoBehaviour
             }
             perminant.Add(currentPosition._thisObject);
 
+            PriorityListElement removeThis=null;
             foreach (var element in locationsCanVisit)
             {
                 if(element == currentPosition)
                 {
-                    locationsCanVisit.Remove(element);
+                    removeThis = element; 
                 }
+            }
+            
+            if (removeThis != null)
+            {
+                locationsCanVisit.Remove(removeThis);  //Maybe cant do foreach
             }
             
         } while (locationsCanVisit.Count != 0);
