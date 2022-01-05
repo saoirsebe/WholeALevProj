@@ -173,10 +173,9 @@ public class RMapGenorator : MonoBehaviour
                     removeThis = element; 
                 }
             }
-            
             if (removeThis != null)
             {
-                locationsCanVisit.Remove(removeThis);  //Maybe cant do foreach
+                locationsCanVisit.Remove(removeThis);
             }
             
         } while (locationsCanVisit.Count != 0);
@@ -234,15 +233,21 @@ public class RMapGenorator : MonoBehaviour
         if (currentWeight > possibleNewWeight)
         {
             distanceFromStartArray[squareObj._x, squareObj._y] = possibleNewWeight; //If previous squares weight plus weight to move to this square is less then the weight at the square now then change weight to new weight
+
+            PriorityListElement removeThis = null;
             foreach (var element in locationsCanVisit)
             {
                 if (element == square)  //finds the square un LocationsCanVisit and removis it so new updated weight verion can be added
                 {
-                    locationsCanVisit.Remove(element);
+                    removeThis = element;
                 }
-                square._thisWeight = possibleNewWeight;
-                locationsCanVisit.Add(square);
             }
+            if (removeThis != null)
+            {
+                locationsCanVisit.Remove(removeThis);
+            }
+            square._thisWeight = possibleNewWeight;
+            locationsCanVisit.Add(square);
         }
         
         if (contains == false)
