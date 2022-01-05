@@ -15,7 +15,7 @@ public class RMapGenorator : MonoBehaviour
     public const int maxint = 2147483647;
     public int roomsMade;
     private bool roomsLeft = true;
-    private List<Vector2Int> corridors { get; set; } = new List<Vector2Int>();
+    private HashSet<Vector2Int> corridors { get; set; } = new HashSet<Vector2Int>();
     public HashSet<ObjectLocation> doorsNotVisited = new HashSet<ObjectLocation>();
     static int ArrayMax = 100;
     public int[,] WeightToMoveArray = new int[ArrayMax, ArrayMax];
@@ -248,8 +248,7 @@ public class RMapGenorator : MonoBehaviour
             }
         }
         
-
-        
+  
     }
 }
 
