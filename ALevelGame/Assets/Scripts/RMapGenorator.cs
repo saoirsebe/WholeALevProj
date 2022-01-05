@@ -14,7 +14,7 @@ public class RMapGenorator : MonoBehaviour
 
     public const int maxint = 2147483647;
     public int roomsMade;
-    private bool roomsLeft = true;
+    private bool RoorsLeft = true;
     private HashSet<Vector2Int> corridors { get; set; } = new HashSet<Vector2Int>();
     public HashSet<ObjectLocation> doorsNotVisited = new HashSet<ObjectLocation>();
     static int ArrayMax = 100;
@@ -54,13 +54,13 @@ public class RMapGenorator : MonoBehaviour
         PickEnd(doorStart,maxint);
 
 
-        while (roomsMade==3 & roomsLeft)
+        do
         {
             PickStart();
-            
-        }
+        } while (roomsMade == 3 & RoorsLeft & doorsNotVisited.Count > 0);
 
-        
+
+
 
     }
 
