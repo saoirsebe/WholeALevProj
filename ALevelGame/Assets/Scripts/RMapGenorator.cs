@@ -13,13 +13,14 @@ public class RMapGenorator : MonoBehaviour
     public Room Room;
     public List<ObjectLocation> wallsList = new List<ObjectLocation>();
 
-    public const int maxint = 2147483647;
+    private const int maxint = 2147483647;
     public int roomsMade;
     private bool RoorsLeft = true;
     private HashSet<Vector2Int> corridors { get; set; } = new HashSet<Vector2Int>();
-    public HashSet<ObjectLocation> doorsNotVisited = new HashSet<ObjectLocation>();
+    private HashSet<ObjectLocation> doorsNotVisited = new HashSet<ObjectLocation>();
     static int ArrayMax = 100;
-    public int[,] WeightToMoveArray = new int[ArrayMax, ArrayMax];
+    private int[,] WeightToMoveArray = new int[ArrayMax, ArrayMax];
+    private System.Random rndSeed = new System.Random(System.DateTime.Now.Millisecond); 
 
     public void AddToRoomsList(Room room)
     {
@@ -36,7 +37,7 @@ public class RMapGenorator : MonoBehaviour
 
     void Start()
     {
-        
+
         for (int x = 0; x < ArrayMax; x++)
         {
             for (int y = 0; y < ArrayMax; y++)
@@ -54,17 +55,18 @@ public class RMapGenorator : MonoBehaviour
         ObjectLocation doorStart = new ObjectLocation(5,3,0);
         PickEnd(doorStart,maxint);
 
-
+        //Picks start room after 3 rooms are made and there are still doors to visit
         do
         {
-            PickStart();
+            PickStart(); 
         } while (roomsMade == 3 & RoorsLeft & doorsNotVisited.Count > 0);
 
     }
 
     private void PickStart()
     {
-        int rand1 = Random.Range(0, roomsList.Count); //call function to set seed of random at start / random does not work
+        int rand1 = rndSeed.Next(0, roomsList.Count); //call function to set seed of random at start / random does not work
+        
         Room roomSt = roomsList[rand1];
         List<ObjectLocation> doorsn = roomSt.doors;
         DoorsInStart(doorsn, rand1);
@@ -91,14 +93,14 @@ public class RMapGenorator : MonoBehaviour
         int rand2;
         do
         {
-            rand2 = Random.Range(0, roomsList.Count);
+            rand2 = rndSeed.Next(0, roomsList.Count);
         } while (rand2 == rand1);                 //While random number is the same as the location of the startRoom in roomsList pick another number
 
         Room roomEn = roomsList[rand2];
-        List<ObjectLocation> doorsn = roomEn.doors;
+        List<ObjectLocation> doorsn = roomEn.doors; ////no rand 1 when runs the first time!!!!
 
         int rand3;
-        rand3 = Random.Range(0, doorsn.Count);
+        rand3 = rndSeed.Next(0, doorsn.Count);
         ObjectLocation endDoor = doorsn[rand3];
 
         bool contains = doorsNotVisited.Remove(endDoor);
