@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/ALevelGame/Library/Artifacts
+/ALevelGame/Temp
+/ALevelGame/obj/Debug
