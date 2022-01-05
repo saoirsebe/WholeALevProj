@@ -9,6 +9,7 @@ public class RMapGenorator : MonoBehaviour
 {
     public GameObject[] nodes;
     public List<Room> roomsList = new List<Room>();
+    
     public Room Room;
     public List<ObjectLocation> wallsList = new List<ObjectLocation>();
 
@@ -71,15 +72,19 @@ public class RMapGenorator : MonoBehaviour
 
     private void DoorsInStart(List<ObjectLocation> doorsn, int rand)
     {
-        foreach (var door in doorsn)
+        if(doorsn.Count>0)
         {
-
-            bool contains = doorsNotVisited.Remove(door);  //returns true if door was in and removed from doorsNotVisited
-            if (contains)
+            foreach (var door in doorsn)
             {
-                PickEnd(door, rand);
+
+                bool contains = doorsNotVisited.Remove(door);  //returns true if door was in and removed from doorsNotVisited
+                if (contains)
+                {
+                    PickEnd(door, rand);
+                }
             }
         }
+        
     }
 
 
