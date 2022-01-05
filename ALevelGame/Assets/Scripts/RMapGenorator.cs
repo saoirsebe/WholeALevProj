@@ -231,7 +231,8 @@ public class RMapGenorator : MonoBehaviour
         {
             List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, thisDoor);
             int nextWeight = maxint;
-            ObjectLocation nextSquare;
+            PriorityListElement nextpriorityListElement = adjacentLocations[0];
+            ObjectLocation nextSquare = nextpriorityListElement._thisObject;
             foreach (var square in adjacentLocations)
             {
                 ObjectLocation squareObj = square._thisObject;
@@ -241,7 +242,9 @@ public class RMapGenorator : MonoBehaviour
                     nextWeight = squareWeight;
                     nextSquare = squareObj;
                 }
-
+                Vector2Int nextSquareVector = new Vector2Int(nextSquare._x, nextSquare._y);
+                corridors.Add(nextSquareVector);
+                thisDoor = nextSquare;
             }
         }
         
