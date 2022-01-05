@@ -59,9 +59,6 @@ public class RMapGenorator : MonoBehaviour
             PickStart();
         } while (roomsMade == 3 & RoorsLeft & doorsNotVisited.Count > 0);
 
-
-
-
     }
 
     private void PickStart()
@@ -180,18 +177,42 @@ public class RMapGenorator : MonoBehaviour
     {
         int xcurrentPosition = MiddleDoor._x;
         int ycurrentPosition = MiddleDoor._y;
-
+        List<PriorityListElement> adjacentLocations = new List<PriorityListElement>();
         ObjectLocation leftSquareObj = new ObjectLocation(xcurrentPosition - 1, ycurrentPosition, 0);
-        PriorityListElement leftSquare = new PriorityListElement(leftSquareObj, distanceFromStartArray[xcurrentPosition - 1, ycurrentPosition]);
+        if(isInArray(leftSquareObj))
+        {
+            PriorityListElement leftSquare = new PriorityListElement(leftSquareObj, distanceFromStartArray[xcurrentPosition - 1, ycurrentPosition]);
+            adjacentLocations.Add(leftSquare);
+        }
         ObjectLocation rightSquareObj = new ObjectLocation(xcurrentPosition + 1, ycurrentPosition, 0);
-        PriorityListElement rightSquare = new PriorityListElement(rightSquareObj, distanceFromStartArray[xcurrentPosition + 1, ycurrentPosition]);
+        if (isInArray(rightSquareObj))
+        {
+            PriorityListElement rightSquare = new PriorityListElement(rightSquareObj, distanceFromStartArray[xcurrentPosition + 1, ycurrentPosition]);
+            adjacentLocations.Add(rightSquare);
+        }
         ObjectLocation forwardsquareObj = new ObjectLocation(xcurrentPosition, ycurrentPosition + 1, 0);
-        PriorityListElement forwardsquare = new PriorityListElement(forwardsquareObj, distanceFromStartArray[xcurrentPosition, ycurrentPosition + 1]);
+        if (isInArray(forwardsquareObj))
+        {
+            PriorityListElement forwardsquare = new PriorityListElement(forwardsquareObj, distanceFromStartArray[xcurrentPosition, ycurrentPosition + 1]);
+            adjacentLocations.Add(forwardsquare);
+        }
         ObjectLocation downSquareObj = new ObjectLocation(xcurrentPosition, ycurrentPosition - 1, 0);
-        PriorityListElement downSquare = new PriorityListElement(downSquareObj, distanceFromStartArray[xcurrentPosition, ycurrentPosition - 1]);
-
-        List<PriorityListElement> adjacentLocations = new List<PriorityListElement> { leftSquare, rightSquare, forwardsquare, downSquare };
+        if (isInArray(downSquareObj))
+        {
+            PriorityListElement downSquare = new PriorityListElement(downSquareObj, distanceFromStartArray[xcurrentPosition, ycurrentPosition - 1]);
+            adjacentLocations.Add(downSquare);
+        }
         return adjacentLocations;
+    }
+
+    private bool isInArray(ObjectLocation square)
+    {
+        bool contains = false;
+        if (-1 < square._x & square._x <= ArrayMax & -1 < square._y & square._y <= ArrayMax) //if in array
+        {
+            contains = true;
+        }
+        return contains;
     }
 
     private void NewWeightSetter(PriorityListElement square, PriorityListElement currentPosition, List<PriorityListElement> locationsCanVisit, bool contains, int[,] distanceFromStartArray)
