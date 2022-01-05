@@ -174,7 +174,7 @@ public class RMapGenorator : MonoBehaviour
             }
             
         } while (locationsCanVisit.Count != 0);
-        FindShortestPath(distanceFromStartArray, startDoor);
+        FindShortestPath(distanceFromStartArray, startDoor, endDoor);
     }
     private List<PriorityListElement> FindSurrounding(int[,] distanceFromStartArray, ObjectLocation MiddleDoor)
     {
@@ -222,7 +222,7 @@ public class RMapGenorator : MonoBehaviour
             
     }
 
-    private void FindShortestPath(int[,] distanceFromStartArray, ObjectLocation startDoor)
+    private void FindShortestPath(int[,] distanceFromStartArray, ObjectLocation startDoor, ObjectLocation endDoor)
     {
         bool madeShortestPath = false;
         ObjectLocation thisDoor = startDoor;
@@ -245,6 +245,10 @@ public class RMapGenorator : MonoBehaviour
                 Vector2Int nextSquareVector = new Vector2Int(nextSquare._x, nextSquare._y);
                 corridors.Add(nextSquareVector);
                 thisDoor = nextSquare;
+                if(thisDoor == endDoor)
+                {
+                    madeShortestPath = true;
+                }
             }
         }
         
