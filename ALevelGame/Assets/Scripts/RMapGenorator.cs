@@ -64,13 +64,13 @@ public class RMapGenorator : MonoBehaviour
 
     private void PickStart()
     {
-        int rand = Random.Range(0, roomsList.Count);
-        Room roomSt = roomsList[rand];
+        int rand1 = Random.Range(0, roomsList.Count); //call function to set seed of random at start / random does not work
+        Room roomSt = roomsList[rand1];
         List<ObjectLocation> doorsn = roomSt.doors;
-        DoorsInStart(doorsn, rand);
+        DoorsInStart(doorsn, rand1);
     }
 
-    private void DoorsInStart(List<ObjectLocation> doorsn, int rand)
+    private void DoorsInStart(List<ObjectLocation> doorsn, int rand1)
     {
         if(doorsn.Count>0)
         {
@@ -79,20 +79,20 @@ public class RMapGenorator : MonoBehaviour
                 bool contains = doorsNotVisited.Remove(door);  //returns true if door was in and removed from doorsNotVisited
                 if (contains)
                 {
-                    PickEnd(door, rand);
+                    PickEnd(door, rand1);
                 }
             }
         }
     }
 
 
-    private void PickEnd(ObjectLocation startDoor, int rand)
+    private void PickEnd(ObjectLocation startDoor, int rand1)
     {
         int rand2;
         do
         {
             rand2 = Random.Range(0, roomsList.Count);
-        } while (rand2 == rand);                 //While random number is the same as the location of the startRoom in roomsList pick another number
+        } while (rand2 == rand1);                 //While random number is the same as the location of the startRoom in roomsList pick another number
 
         Room roomEn = roomsList[rand2];
         List<ObjectLocation> doorsn = roomEn.doors;
