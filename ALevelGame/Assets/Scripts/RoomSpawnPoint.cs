@@ -36,7 +36,10 @@ public class RoomSpawnPoint : MonoBehaviour
         
             Room room = new Room(locationx, locationy, doors);
             s11.AddToRoomsList(room);//Adds room location and list of its doors to roomsList
-
+            foreach(var door in doors)//Add to doorsNotVisited
+            {
+                s11.AddTodoorsNotVisited(door);
+            }
 
             searchTagWallTile = "Wall Tile";
             List<ObjectLocation> walls = new List<ObjectLocation>();

@@ -53,6 +53,11 @@ public class RMapGenorator : MonoBehaviour
         roomsList.Add(room);
     }
 
+    public void AddTodoorsNotVisited(ObjectLocation door)
+    {
+        doorsNotVisited.Add(door);
+    }
+
     public void AddToWallsList(List<ObjectLocation> walls)
     {
         foreach (var wallTile in walls)
@@ -262,7 +267,6 @@ public class RMapGenorator : MonoBehaviour
         {
             locationsCanVisit.Add(square);
         }
-            
     }
 
     private void FindShortestPath(int[,] distanceFromStartArray, ObjectLocation startDoor, ObjectLocation endDoor)
@@ -294,8 +298,6 @@ public class RMapGenorator : MonoBehaviour
                 }
             }
         }
-        
-  
     }
 }
 
