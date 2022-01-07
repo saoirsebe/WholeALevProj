@@ -18,7 +18,6 @@ public class RMapGenorator : MonoBehaviour
     private HashSet<ObjectLocation> doorsNotVisited = new HashSet<ObjectLocation>();
     static int ArrayMax = 100;
     private int[,] WeightToMoveArray = new int[ArrayMax, ArrayMax];
-    private System.Random rndSeed = new System.Random(System.DateTime.Now.Millisecond);
     private int roomsMade;
 
     public void AddToRoomsMade()
@@ -74,7 +73,7 @@ public class RMapGenorator : MonoBehaviour
 
     private void PickStart()
     {
-        int rand1 = rndSeed.Next(0, roomsList.Count); //call function to set seed of random at start / random does not work
+        int rand1 = Random.Range(0, roomsList.Count); //call function to set seed of random at start / random does not work
         
         Room roomSt = roomsList[rand1];
         List<ObjectLocation> doorsn = roomSt.doors;
@@ -102,14 +101,14 @@ public class RMapGenorator : MonoBehaviour
         int rand2;
         do
         {
-            rand2 = rndSeed.Next(0, roomsList.Count);
+            rand2 = Random.Range(0, roomsList.Count);
         } while (rand2 == rand1);                 //While random number is the same as the location of the startRoom in roomsList pick another number
 
         Room roomEn = roomsList[rand2];
         List<ObjectLocation> doorsn = roomEn.doors; ////no rand 1 when runs the first time!!!!
 
         int rand3;
-        rand3 = rndSeed.Next(0, doorsn.Count);
+        rand3 = Random.Range(0, doorsn.Count);
         ObjectLocation endDoor = doorsn[rand3];
 
         bool contains = doorsNotVisited.Remove(endDoor);

@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class RoomSpawnPoint : MonoBehaviour
 {
-    private System.Random rndSeed = new System.Random(System.DateTime.Now.Millisecond);
     public GameObject[] objects;
     private Vector3 transPos;
     private int xCoord;
@@ -25,7 +24,7 @@ public class RoomSpawnPoint : MonoBehaviour
         int locationx = (int)transform.position.x;
         int locationy = (int)transform.position.y;
 
-        int rand = rndSeed.Next(0, objects.Length);
+        int rand = Random.Range(0, objects.Length);
         GameObject obj = Instantiate(objects[rand],transform.position, Quaternion.identity);//Spawns random room from list
 
         if (s1 != null) 
