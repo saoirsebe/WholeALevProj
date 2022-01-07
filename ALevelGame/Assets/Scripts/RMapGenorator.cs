@@ -24,6 +24,26 @@ public class RMapGenorator : MonoBehaviour
     public void AddToRoomsMade()
     {
         roomsMade += 1;
+        if (roomsMade >= 3)
+        {
+            for (int x = 0; x < ArrayMax; x++)
+            {
+                for (int y = 0; y < ArrayMax; y++)
+                {
+                    WeightToMoveArray[x, y] = 1;
+                }
+            }
+            foreach (var wall in wallsList)
+            {
+                int wallx = wall._x;
+                int wally = wall._y;
+                WeightToMoveArray[wallx, wally] = maxint; //Set locations of walls in array to max int so weight of moving ples prev location will be max and not picked
+            }
+
+            ObjectLocation doorStart = new ObjectLocation(5, 3, 0);
+            PickEnd(doorStart, maxint);
+            StartShortestPathAlgorithm();
+        }
     }
 
     public void AddToRoomsList(Room room)
@@ -41,27 +61,6 @@ public class RMapGenorator : MonoBehaviour
 
     public void StartShortestPathAlgorithm()
     {
-
-        for (int x = 0; x < ArrayMax; x++)
-        {
-            for (int y = 0; y < ArrayMax; y++)
-            {
-                WeightToMoveArray[x, y] = 1;
-            }
-        }
-        foreach (var wall in wallsList)
-        {
-            int wallx = wall._x;
-            int wally = wall._y;
-            WeightToMoveArray[wallx, wally] = maxint; //Set locations of walls in array to max int so weight of moving ples prev location will be max and not picked
-        }
-
-        if(roomsMade ==3)
-        {
-            ObjectLocation doorStart = new ObjectLocation(5, 3, 0);
-            PickEnd(doorStart, maxint);
-        }
-
         //Picks start room after 3 rooms are made and there are still doors to visit
         while (roomsMade == 3 & RoorsLeft & doorsNotVisited.Count > 0)
         {
