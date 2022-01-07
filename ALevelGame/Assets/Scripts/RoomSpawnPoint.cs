@@ -16,7 +16,6 @@ public class RoomSpawnPoint : MonoBehaviour
     private GameObject s1;
     private RMapGenorator s11;
 
-
     void Start()
     {
         s1 = GameObject.Find("RMapGenerator");
@@ -54,8 +53,8 @@ public class RoomSpawnPoint : MonoBehaviour
         listToAdd.Clear();
         Transform parent = obj.transform;
 
-        return GetChildObject(parent, _tag, listToAdd);
- 
+        List<ObjectLocation> listToReturn =  GetChildObject(parent, _tag, listToAdd);
+        return listToReturn;
     }
 
     private List<ObjectLocation> GetChildObject(Transform parent, string _tag, List<ObjectLocation> listToAdd)

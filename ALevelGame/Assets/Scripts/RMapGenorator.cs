@@ -23,7 +23,7 @@ public class RMapGenorator : MonoBehaviour
     public void AddToRoomsMade()
     {
         roomsMade += 1;
-        if (roomsMade >= 3)
+        if (roomsMade == 4)
         {
             for (int x = 0; x < ArrayMax; x++)
             {
@@ -76,7 +76,7 @@ public class RMapGenorator : MonoBehaviour
         int rand1 = Random.Range(0, roomsList.Count); //call function to set seed of random at start / random does not work
         
         Room roomSt = roomsList[rand1];
-        List<ObjectLocation> doorsn = roomSt.doors;
+        List<ObjectLocation> doorsn = roomSt._doors;
         DoorsInStart(doorsn, rand1);
     }
 
@@ -105,7 +105,7 @@ public class RMapGenorator : MonoBehaviour
         } while (rand2 == rand1);                 //While random number is the same as the location of the startRoom in roomsList pick another number
 
         Room roomEn = roomsList[rand2];
-        List<ObjectLocation> doorsn = roomEn.doors; ////no rand 1 when runs the first time!!!!
+        List<ObjectLocation> doorsn = roomEn._doors; ////no rand 1 when runs the first time!!!!
 
         int rand3;
         rand3 = Random.Range(0, doorsn.Count);
@@ -303,10 +303,9 @@ public class RMapGenorator : MonoBehaviour
 
 public class Room
 {
-    internal List<ObjectLocation> doors;
     int _x;
     int _y;
-    List<ObjectLocation> _doors;
+    public List<ObjectLocation> _doors;
 
     public Room(int x, int y, List<ObjectLocation> doors)
     {
