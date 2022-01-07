@@ -42,7 +42,7 @@ public class RMapGenorator : MonoBehaviour
                 }
             }
 
-            ObjectLocation doorStart = new ObjectLocation(5, 3, 0);
+            ObjectLocation doorStart = new ObjectLocation(21, 15, 0);
             PickEnd(doorStart, maxint);
             StartShortestPathAlgorithm();
         }
