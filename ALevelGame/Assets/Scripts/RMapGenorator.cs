@@ -37,7 +37,10 @@ public class RMapGenorator : MonoBehaviour
             {
                 int wallx = wall._x;
                 int wally = wall._y;
-                WeightToMoveArray[wallx, wally] = maxint; //Set locations of walls in array to max int so weight of moving ples prev location will be max and not picked
+                if(wallx<=100 & wally<=100)
+                {
+                    WeightToMoveArray[wallx, wally] = maxint; //Set locations of walls in array to max int so weight of moving ples prev location will be max and not picked
+                }
             }
 
             ObjectLocation doorStart = new ObjectLocation(5, 3, 0);
@@ -138,7 +141,6 @@ public class RMapGenorator : MonoBehaviour
         perminant.Add(endDoor);
         PriorityListElement currentPosition = new PriorityListElement(endDoor, maxint);
 
-
         do
         {
             List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, endDoor);
@@ -151,7 +153,6 @@ public class RMapGenorator : MonoBehaviour
                 {
                     contains = true;
                 }
-
                 
                 bool isPerm = perminant.Contains(squareObj);
                 if (contains==true & isPerm==false) //if it an actual square in array and not perminant/visited
@@ -195,25 +196,25 @@ public class RMapGenorator : MonoBehaviour
         int ycurrentPosition = MiddleDoor._y;
         List<PriorityListElement> adjacentLocations = new List<PriorityListElement>();
         ObjectLocation leftSquareObj = new ObjectLocation(xcurrentPosition - 1, ycurrentPosition, 0);
-        if(isInArray(leftSquareObj))
+        if(IsInArray(leftSquareObj))
         {
             PriorityListElement leftSquare = new PriorityListElement(leftSquareObj, distanceFromStartArray[xcurrentPosition - 1, ycurrentPosition]);
             adjacentLocations.Add(leftSquare);
         }
         ObjectLocation rightSquareObj = new ObjectLocation(xcurrentPosition + 1, ycurrentPosition, 0);
-        if (isInArray(rightSquareObj))
+        if (IsInArray(rightSquareObj))
         {
             PriorityListElement rightSquare = new PriorityListElement(rightSquareObj, distanceFromStartArray[xcurrentPosition + 1, ycurrentPosition]);
             adjacentLocations.Add(rightSquare);
         }
         ObjectLocation forwardsquareObj = new ObjectLocation(xcurrentPosition, ycurrentPosition + 1, 0);
-        if (isInArray(forwardsquareObj))
+        if (IsInArray(forwardsquareObj))
         {
             PriorityListElement forwardsquare = new PriorityListElement(forwardsquareObj, distanceFromStartArray[xcurrentPosition, ycurrentPosition + 1]);
             adjacentLocations.Add(forwardsquare);
         }
         ObjectLocation downSquareObj = new ObjectLocation(xcurrentPosition, ycurrentPosition - 1, 0);
-        if (isInArray(downSquareObj))
+        if (IsInArray(downSquareObj))
         {
             PriorityListElement downSquare = new PriorityListElement(downSquareObj, distanceFromStartArray[xcurrentPosition, ycurrentPosition - 1]);
             adjacentLocations.Add(downSquare);
@@ -221,7 +222,7 @@ public class RMapGenorator : MonoBehaviour
         return adjacentLocations;
     }
 
-    private bool isInArray(ObjectLocation square)
+    private bool IsInArray(ObjectLocation square)
     {
         bool contains = false;
         if (-1 < square._x & square._x <= ArrayMax & -1 < square._y & square._y <= ArrayMax) //if in array
