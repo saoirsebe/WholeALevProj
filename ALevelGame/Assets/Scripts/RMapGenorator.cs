@@ -9,18 +9,22 @@ public class RMapGenorator : MonoBehaviour
 {
     public GameObject[] nodes;
     public List<Room> roomsList = new List<Room>();
-    
     public Room Room;
     public List<ObjectLocation> wallsList = new List<ObjectLocation>();
 
     private const int maxint = 2147483647;
-    public int roomsMade;
     private bool RoorsLeft = true;
     private HashSet<Vector2Int> corridors { get; set; } = new HashSet<Vector2Int>();
     private HashSet<ObjectLocation> doorsNotVisited = new HashSet<ObjectLocation>();
     static int ArrayMax = 100;
     private int[,] WeightToMoveArray = new int[ArrayMax, ArrayMax];
-    private System.Random rndSeed = new System.Random(System.DateTime.Now.Millisecond); 
+    private System.Random rndSeed = new System.Random(System.DateTime.Now.Millisecond);
+    private int roomsMade;
+
+    public void AddToRoomsMade()
+    {
+        roomsMade += 1;
+    }
 
     public void AddToRoomsList(Room room)
     {
@@ -35,7 +39,7 @@ public class RMapGenorator : MonoBehaviour
         }
     }
 
-    void Start()
+    public void StartShortestPathAlgorithm()
     {
 
         for (int x = 0; x < ArrayMax; x++)
@@ -52,14 +56,17 @@ public class RMapGenorator : MonoBehaviour
             WeightToMoveArray[wallx, wally] = maxint; //Set locations of walls in array to max int so weight of moving ples prev location will be max and not picked
         }
 
-        ObjectLocation doorStart = new ObjectLocation(5,3,0);
-        PickEnd(doorStart,maxint);
+        if(roomsMade ==3)
+        {
+            ObjectLocation doorStart = new ObjectLocation(5, 3, 0);
+            PickEnd(doorStart, maxint);
+        }
 
         //Picks start room after 3 rooms are made and there are still doors to visit
-        do
+        while (roomsMade == 3 & RoorsLeft & doorsNotVisited.Count > 0)
         {
             PickStart(); 
-        } while (roomsMade == 3 & RoorsLeft & doorsNotVisited.Count > 0);
+        } 
 
     }
 

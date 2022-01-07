@@ -46,4 +46,6 @@ MonoBehaviour:
   objects:
   - {fileID: 6047921926677376372, guid: 99cffb5904fc455448e0ced4863fdf01, type: 3}
   - {fileID: 3447370570778523212, guid: d596a321a18685c488570ea0b69a63bc, type: 3}
+  RunGenerator: 0
   s1: {fileID: 3501039549668175300, guid: cac9194f49d025543a91d0e204b84a41, type: 3}
+  beep: {fileID: 6747730330024524460}
