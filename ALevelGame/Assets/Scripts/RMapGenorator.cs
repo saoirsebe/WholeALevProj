@@ -271,7 +271,7 @@ public class RMapGenorator : MonoBehaviour
 
     private void NewWeightSetter(PriorityListElement square, PriorityListElement currentPosition, List<PriorityListElement> locationsCanVisit, int contains, int[,] distanceFromStartArray)
     {
-        ObjectLocation squareObj = square._thisObject; //currentposition and square are equal**** sometimes (contains fun prob)
+        ObjectLocation squareObj = square._thisObject; //currentposition and square are equal**** sometimes (contains function prob)
         int squarex = squareObj._x;
         int squarey = squareObj._y;
 
@@ -292,10 +292,12 @@ public class RMapGenorator : MonoBehaviour
             square._thisWeight = possibleNewWeight;
             locationsCanVisit.Add(square);
         }
-        
-        if (contains == maxint) //if surrounding tile in not in locationsCanVisit then add it
+        else
         {
-            locationsCanVisit.Add(square);
+            if (contains == maxint) //if surrounding tile in not in locationsCanVisit then add it
+            {
+                locationsCanVisit.Add(square);
+            }
         }
     }
 
