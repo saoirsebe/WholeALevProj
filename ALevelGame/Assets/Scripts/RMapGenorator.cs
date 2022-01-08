@@ -283,24 +283,17 @@ public class RMapGenorator : MonoBehaviour
         {
             distanceFromStartArray[squarex, squarey] = possibleNewWeight; //If previous squares weight plus weight to move to this square is less then the weight at the square now then change weight to new weight
 
-            PriorityListElement removeThis = null;
-            foreach (var element in locationsCanVisit)
+            int whereInLocationsCanVisit = ContainsFunctionPLE(locationsCanVisit, square);
+            if (whereInLocationsCanVisit<maxint)
             {
-                ObjectLocation elementObj = element._thisObject;
-                if (elementObj._y == squarex & elementObj._y == squarey)  //finds the square un LocationsCanVisit and removis it so new updated weight verion can be added
-                {
-                    removeThis = element;
-                }
+                locationsCanVisit.RemoveAt(whereInLocationsCanVisit);
             }
-            if (removeThis != null)
-            {
-                locationsCanVisit.Remove(removeThis);
-            }
+
             square._thisWeight = possibleNewWeight;
             locationsCanVisit.Add(square);
         }
         
-        if (contains <maxint) //if surrounding tile in not in locationsCanVisit then add it
+        if (contains == maxint) //if surrounding tile in not in locationsCanVisit then add it
         {
             locationsCanVisit.Add(square);
         }
