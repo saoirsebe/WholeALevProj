@@ -269,21 +269,22 @@ public class RMapGenorator : MonoBehaviour
     private void NewWeightSetter(PriorityListElement square, PriorityListElement currentPosition, List<PriorityListElement> locationsCanVisit, bool contains, int[,] distanceFromStartArray)
     {
         ObjectLocation squareObj = square._thisObject; //currentposition and square are equal**** sometimes (contains fun prob)
+        int squarex = squareObj._x;
+        int squarey = squareObj._y;
 
-        int currentWeight = distanceFromStartArray[squareObj._x, squareObj._y];    //currentweight always 1
+        int currentWeight = distanceFromStartArray[squarex, squarey];    //currentweight always 1
         ObjectLocation currentPositionObj = currentPosition._thisObject;
         int prevWeight = distanceFromStartArray[currentPositionObj._x, currentPositionObj._y];
-        int possibleNewWeight = prevWeight + WeightToMoveArray[squareObj._x, squareObj._y];
+        int possibleNewWeight = prevWeight + WeightToMoveArray[squarex, squarey];
         if (currentWeight > possibleNewWeight)
         {
-            distanceFromStartArray[squareObj._x, squareObj._y] = possibleNewWeight; //If previous squares weight plus weight to move to this square is less then the weight at the square now then change weight to new weight
-
+            distanceFromStartArray[squarex, squarey] = possibleNewWeight; //If previous squares weight plus weight to move to this square is less then the weight at the square now then change weight to new weight
 
             PriorityListElement removeThis = null;
             foreach (var element in locationsCanVisit)
             {
-
-                if (element == square)  //finds the square un LocationsCanVisit and removis it so new updated weight verion can be added
+                ObjectLocation elementObj = element._thisObject;
+                if (elementObj._y == squarex & elementObj._y == squarey)  //finds the square un LocationsCanVisit and removis it so new updated weight verion can be added
                 {
                     removeThis = element;
                 }
