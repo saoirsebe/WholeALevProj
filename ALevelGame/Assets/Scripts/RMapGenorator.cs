@@ -166,10 +166,10 @@ public class RMapGenorator : MonoBehaviour
 
             foreach (var varr in locationsCanVisit)   //Makes current position the position with the lowest weight
             {
-                int newCurrentWeight = varr._thisWeight;  //all weights 1***
+                int newCurrentWeight = varr._thisWeight;  //all weights 1***?
                 int thisCurrentWeight = currentPosition._thisWeight;
-
-                if (newCurrentWeight < thisCurrentWeight)
+                int isPerm = ContainsFunction(perminant, currentPosition._thisObject);
+                if (newCurrentWeight < thisCurrentWeight & isPerm==maxint)
                 {
                     currentPosition = varr; //if all the same, current weight still needs to change
                 }
