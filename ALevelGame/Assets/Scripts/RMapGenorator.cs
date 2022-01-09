@@ -36,7 +36,7 @@ public class RMapGenorator : MonoBehaviour
             {
                 int wallx = wall._x;
                 int wally = wall._y;
-                if(wallx<=100 & wally<=100)
+                if(wallx<=100 && wally<=100)
                 {
                     WeightToMoveArray[wallx, wally] = maxint; //Set locations of walls in array to max int so weight of moving ples prev location will be max and not picked
                 }
@@ -164,14 +164,15 @@ public class RMapGenorator : MonoBehaviour
                 }
             }
 
+            int weightToCompare = maxint;
             foreach (var varr in locationsCanVisit)   //Makes current position the position with the lowest weight
             {
                 int newCurrentWeight = varr._thisWeight;  //all weights 1***?
-                int thisCurrentWeight = currentPosition._thisWeight;
-                int isPerm = ContainsFunction(perminant, currentPosition._thisObject);
-                if (newCurrentWeight < thisCurrentWeight & isPerm==maxint)
+                int isPerm = ContainsFunction(perminant, varr._thisObject);
+                if (newCurrentWeight < weightToCompare && isPerm==maxint)
                 {
                     currentPosition = varr; //if all the same, current weight still needs to change
+                    weightToCompare = currentPosition._thisWeight;
                 }
             }
             perminant.Add(currentPosition._thisObject);
@@ -181,7 +182,7 @@ public class RMapGenorator : MonoBehaviour
             {
                 ObjectLocation elementObj = element._thisObject;
                 ObjectLocation currentPositionObj = currentPosition._thisObject;
-                if (elementObj._x == currentPositionObj._x & elementObj._y == currentPositionObj._y)
+                if (elementObj._x == currentPositionObj._x && elementObj._y == currentPositionObj._y)
                 {
                     removeThis = element; 
                 }
@@ -203,7 +204,7 @@ public class RMapGenorator : MonoBehaviour
         foreach (var item in listToCheck)
         {
             ObjectLocation itemObj = item._thisObject;
-            if (itemObj._x == isItemInObj._x & itemObj._y == isItemInObj._y)
+            if (itemObj._x == isItemInObj._x && itemObj._y == isItemInObj._y)
             {
                 whereItContains = counter;
             }
@@ -218,7 +219,7 @@ public class RMapGenorator : MonoBehaviour
         int counter = 0;
         foreach (var item in listToCheck)
         {
-            if(item._x == isItemIn._x & item._y == isItemIn._y)
+            if(item._x == isItemIn._x && item._y == isItemIn._y)
             {
                 whereItContains = counter;
             }
@@ -262,7 +263,7 @@ public class RMapGenorator : MonoBehaviour
     private bool IsInArray(ObjectLocation square)
     {
         bool contains = false;
-        if (-1 < square._x & square._x <= ArrayMax & -1 < square._y & square._y <= ArrayMax) //if in array
+        if (-1 < square._x && square._x <= ArrayMax && -1 < square._y && square._y <= ArrayMax) //if in array
         {
             contains = true;
         }
