@@ -178,20 +178,6 @@ public class RMapGenorator : MonoBehaviour
             }
             perminant.Add(currentPosition._thisObject);
 
-            PriorityListElement removeThis=null;
-            foreach (var element in locationsCanVisit)//finds and removes currentPosition
-            {
-                ObjectLocation elementObj = element._thisObject;
-                ObjectLocation currentPositionObj = currentPosition._thisObject;
-                if (elementObj._x == currentPositionObj._x && elementObj._y == currentPositionObj._y)
-                {
-                    removeThis = element; 
-                }
-            }
-            if (removeThis != null)
-            {
-                locationsCanVisit.Remove(removeThis);
-            }
             
         } while (perminant.Count<10000);
         FindShortestPath(distanceFromStartArray, startDoor, endDoor);
