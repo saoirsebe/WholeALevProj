@@ -147,11 +147,12 @@ public class RMapGenorator : MonoBehaviour
         distanceFromStartArray[xSet,ySet] = 0;
         perminant.Add(endDoor);
         PriorityListElement currentPosition = new PriorityListElement(endDoor, maxint);
+        ObjectLocation currentLocation = endDoor;
 
         do
         {
             List<PriorityListElement> locationsCanVisit = new List<PriorityListElement>();
-            List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, endDoor);
+            List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, currentLocation);
 
             foreach (var square in adjacentLocations)
             {
@@ -177,8 +178,9 @@ public class RMapGenorator : MonoBehaviour
                 }
             }
             perminant.Add(currentPosition._thisObject);
+            currentLocation = currentPosition._thisObject;
 
-            
+
         } while (perminant.Count<10000);
         FindShortestPath(distanceFromStartArray, startDoor, endDoor);
     }
