@@ -130,7 +130,7 @@ public class RMapGenorator : MonoBehaviour
 
     private void MakeDistanceFromEndArray(ObjectLocation startDoor,ObjectLocation endDoor)
     {
-        List<PriorityListElement> locationsCanVisit = new List<PriorityListElement>(); 
+        
         List<ObjectLocation> perminant = new List<ObjectLocation>();
 
 
@@ -150,6 +150,7 @@ public class RMapGenorator : MonoBehaviour
 
         do
         {
+            List<PriorityListElement> locationsCanVisit = new List<PriorityListElement>();
             List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, endDoor);
 
             foreach (var square in adjacentLocations)
@@ -178,7 +179,7 @@ public class RMapGenorator : MonoBehaviour
             perminant.Add(currentPosition._thisObject);
 
             PriorityListElement removeThis=null;
-            foreach (var element in locationsCanVisit)
+            foreach (var element in locationsCanVisit)//finds and removes currentPosition
             {
                 ObjectLocation elementObj = element._thisObject;
                 ObjectLocation currentPositionObj = currentPosition._thisObject;
@@ -192,7 +193,7 @@ public class RMapGenorator : MonoBehaviour
                 locationsCanVisit.Remove(removeThis);
             }
             
-        } while (locationsCanVisit.Count != 0);
+        } while (perminant.Count<10000);
         FindShortestPath(distanceFromStartArray, startDoor, endDoor);
     }
 
@@ -270,9 +271,9 @@ public class RMapGenorator : MonoBehaviour
         return contains;
     }
 
-    private void NewWeightSetter(PriorityListElement square, PriorityListElement currentPosition, List<PriorityListElement> locationsCanVisit, int contains, int[,] distanceFromStartArray)
+    private void NewWeightSetter(PriorityListElement newWeightSquare, PriorityListElement currentPosition, List<PriorityListElement> locationsCanVisit, int contains, int[,] distanceFromStartArray)
     {
-        ObjectLocation squareObj = square._thisObject; //currentposition and square are equal**** sometimes (contains function prob)
+        ObjectLocation squareObj = newWeightSquare._thisObject; //currentposition and square are equal**** sometimes (contains function prob)
         int squarex = squareObj._x;
         int squarey = squareObj._y;
 
@@ -282,22 +283,23 @@ public class RMapGenorator : MonoBehaviour
         int possibleNewWeight = prevWeight + WeightToMoveArray[squarex, squarey];
         if (currentWeight > possibleNewWeight)
         {
+
             distanceFromStartArray[squarex, squarey] = possibleNewWeight; //If previous squares weight plus weight to move to this square is less then the weight at the square now then change weight to new weight
 
-            int whereInLocationsCanVisit = ContainsFunctionPLE(locationsCanVisit, square);
+            int whereInLocationsCanVisit = ContainsFunctionPLE(locationsCanVisit, newWeightSquare);
             if (whereInLocationsCanVisit<maxint)
             {
                 locationsCanVisit.RemoveAt(whereInLocationsCanVisit);
             }
 
-            square._thisWeight = possibleNewWeight;
-            locationsCanVisit.Add(square);
+            newWeightSquare._thisWeight = possibleNewWeight;
+            locationsCanVisit.Add(newWeightSquare);
         }
         else
         {
             if (contains == maxint) //if surrounding tile in not in locationsCanVisit then add it
             {
-                locationsCanVisit.Add(square);
+                locationsCanVisit.Add(newWeightSquare);
             }
         }
     }
