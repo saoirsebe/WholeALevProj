@@ -12,7 +12,7 @@ public class RMapGenorator : MonoBehaviour
     public Room Room;
     public List<ObjectLocation> wallsList = new List<ObjectLocation>();
 
-    private const int maxint = 2147483647;
+    private const int maxint = 2147473647;
     private bool RoorsLeft = true;
     private HashSet<Vector2Int> corridors { get; set; } = new HashSet<Vector2Int>();
     private List<ObjectLocation> doorsNotVisited = new List<ObjectLocation>();
