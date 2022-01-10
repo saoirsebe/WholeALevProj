@@ -155,8 +155,8 @@ public class RMapGenorator : MonoBehaviour
         PriorityListElement currentPosition = new PriorityListElement(endDoor, maxint);
         locationsCanVisit.Add(currentPosition);
         distanceFromStartArray[startDoor._x, startDoor._y] = 0;
-        ObjectLocation currentLocation;
-        do
+        ObjectLocation currentLocation = endDoor;
+        while(currentLocation._x != startDoor._x || currentLocation._y != startDoor._y)
         {
             int weightToCompare = maxint;
             foreach (var varr in locationsCanVisit)   //Makes current position the position with the lowest weight
@@ -187,7 +187,7 @@ public class RMapGenorator : MonoBehaviour
                 }
             }
 
-        } while (currentLocation._x != startDoor._x || currentLocation._y != startDoor._y);
+        }
         FindShortestPath(distanceFromStartArray, startDoor, endDoor);
     }
 
@@ -300,32 +300,25 @@ public class RMapGenorator : MonoBehaviour
 
     private void FindShortestPath(int[,] distanceFromStartArray, ObjectLocation startDoor, ObjectLocation endDoor)
     {
-        bool madeShortestPath = false;
         ObjectLocation thisDoor = startDoor;
+        distanceFromStartArray[endDoor._x, endDoor._y] = 0;
+        ObjectLocation nextSquare = thisDoor;
 
-        while (madeShortestPath ==false)
+        while (thisDoor._x != endDoor._x || thisDoor._y != endDoor._y)//if hasnt reached end door
         {
             List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, thisDoor);
             int nextWeight = maxint;
-            PriorityListElement nextpriorityListElement = adjacentLocations[0];
-            ObjectLocation nextSquare = nextpriorityListElement._thisObject;
             foreach (var square in adjacentLocations)
             {
-                ObjectLocation squareObj = square._thisObject;
-                int squareWeight = square._thisWeight;
-                if (squareWeight<nextWeight)
+                if (square._thisWeight<nextWeight)
                 {
-                    nextWeight = squareWeight;
-                    nextSquare = squareObj;
-                }
-                Vector2Int nextSquareVector = new Vector2Int(nextSquare._x, nextSquare._y);
-                corridors.Add(nextSquareVector);
-                thisDoor = nextSquare;
-                if(thisDoor == endDoor)
-                {
-                    madeShortestPath = true;
+                    nextWeight = square._thisWeight;
+                    nextSquare = square._thisObject;
                 }
             }
+            Vector2Int nextSquareVector = new Vector2Int(nextSquare._x, nextSquare._y);
+            corridors.Add(nextSquareVector);
+            thisDoor = nextSquare;
         }
     }
 }
