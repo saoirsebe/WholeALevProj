@@ -115,7 +115,12 @@ public class RMapGenorator : MonoBehaviour
         List<ObjectLocation> doorsn = roomEn._doors;
 
         int rand3;
-        rand3 = Random.Range(0, doorsn.Count-1);
+        ObjectLocation doorCheck;
+        do
+        {
+            rand3 = Random.Range(0, doorsn.Count - 1);
+            doorCheck = doorsn[rand3];
+        } while (ContainsFunction(doorsNotVisited, doorCheck) == maxint);
         ObjectLocation endDoor = doorsn[rand3];
 
         int whereInDoorsNotVisited = ContainsFunction(doorsNotVisited, endDoor);
