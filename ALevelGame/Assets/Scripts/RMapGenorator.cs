@@ -300,6 +300,7 @@ public class RMapGenorator : MonoBehaviour
 
     private void FindShortestPath(int[,] distanceFromStartArray, ObjectLocation startDoor, ObjectLocation endDoor)
     {
+        List<ObjectLocation> finalVisited = new List<ObjectLocation>();
         ObjectLocation thisDoor = startDoor;
         distanceFromStartArray[endDoor._x, endDoor._y] = 0;
         ObjectLocation nextSquare = thisDoor;
@@ -310,7 +311,7 @@ public class RMapGenorator : MonoBehaviour
             int nextWeight = maxint;
             foreach (var square in adjacentLocations)
             {
-                if (square._thisWeight<nextWeight)
+                if (square._thisWeight<nextWeight && ContainsFunction(finalVisited,square._thisObject)==maxint)
                 {
                     nextWeight = square._thisWeight;
                     nextSquare = square._thisObject;
@@ -319,6 +320,7 @@ public class RMapGenorator : MonoBehaviour
             Vector2Int nextSquareVector = new Vector2Int(nextSquare._x, nextSquare._y);
             corridors.Add(nextSquareVector);
             thisDoor = nextSquare;
+            finalVisited.Add(thisDoor);
         }
     }
 }
