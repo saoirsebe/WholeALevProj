@@ -43,6 +43,7 @@ public class RMapGenorator : MonoBehaviour
             }
 
             ObjectLocation doorStart = new ObjectLocation(21, 15, 0);
+            
             PickEnd(doorStart, maxint);
             StartShortestPathAlgorithm();
         }
@@ -95,6 +96,7 @@ public class RMapGenorator : MonoBehaviour
                 int whereInDoorsNotVisited = ContainsFunction(doorsNotVisited, door);
                 if (whereInDoorsNotVisited < maxint)
                 {
+
                     doorsNotVisited.RemoveAt(whereInDoorsNotVisited);
                     PickEnd(door, rand1);
                 }
@@ -147,12 +149,13 @@ public class RMapGenorator : MonoBehaviour
                 distanceFromStartArray[x, y] = maxint;
             }
         }
-        int xSet = endDoor._x;
-        int ySet = endDoor._y;
-        distanceFromStartArray[xSet,ySet] = 0;
+       
+        distanceFromStartArray[endDoor._x, endDoor._y] = 0;
         perminant.Add(endDoor);
         PriorityListElement currentPosition = new PriorityListElement(endDoor, maxint);
         ObjectLocation currentLocation = endDoor;
+
+        distanceFromStartArray[startDoor._x, startDoor._y] = 0;
 
         do
         {
