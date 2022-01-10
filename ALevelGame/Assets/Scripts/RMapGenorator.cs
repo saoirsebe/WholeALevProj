@@ -78,7 +78,7 @@ public class RMapGenorator : MonoBehaviour
 
     private void PickStart()
     {
-        int rand1 = Random.Range(0, roomsList.Count); //call function to set seed of random at start / random does not work
+        int rand1 = Random.Range(0, roomsList.Count-1); //call function to set seed of random at start / random does not work
         
         Room roomSt = roomsList[rand1];
         List<ObjectLocation> doorsn = roomSt._doors;
@@ -108,14 +108,14 @@ public class RMapGenorator : MonoBehaviour
         int rand2;
         do
         {
-            rand2 = Random.Range(0, roomsList.Count);
+            rand2 = Random.Range(0, roomsList.Count-1);
         } while (rand2 == rand1);                 //While random number is the same as the location of the startRoom in roomsList pick another number
 
         Room roomEn = roomsList[rand2];
-        List<ObjectLocation> doorsn = roomEn._doors; ////no rand 1 when runs the first time!!!!
+        List<ObjectLocation> doorsn = roomEn._doors;
 
         int rand3;
-        rand3 = Random.Range(0, doorsn.Count);
+        rand3 = Random.Range(0, doorsn.Count-1);
         ObjectLocation endDoor = doorsn[rand3];
 
         int whereInDoorsNotVisited = ContainsFunction(doorsNotVisited, endDoor);
@@ -152,7 +152,7 @@ public class RMapGenorator : MonoBehaviour
         do
         {
             List<PriorityListElement> locationsCanVisit = new List<PriorityListElement>();
-            List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, currentLocation);
+            List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, currentLocation); //currentLocation out of bounds error?
 
             foreach (var square in adjacentLocations)
             {
