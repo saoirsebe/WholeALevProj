@@ -139,7 +139,7 @@ public class RMapGenorator : MonoBehaviour
     {
         
         List<ObjectLocation> perminant = new List<ObjectLocation>();
-
+        List<PriorityListElement> locationsCanVisit = new List<PriorityListElement>();
 
         int[,] distanceFromStartArray = new int[ArrayMax, ArrayMax];
         for (int x = 0; x < ArrayMax; x++)
@@ -151,15 +151,28 @@ public class RMapGenorator : MonoBehaviour
         }
        
         distanceFromStartArray[endDoor._x, endDoor._y] = 0;
-        perminant.Add(endDoor);
+       
         PriorityListElement currentPosition = new PriorityListElement(endDoor, maxint);
-        ObjectLocation currentLocation = endDoor;
-
+        locationsCanVisit.Add(currentPosition);
         distanceFromStartArray[startDoor._x, startDoor._y] = 0;
-
+        ObjectLocation currentLocation;
         do
         {
-            List<PriorityListElement> locationsCanVisit = new List<PriorityListElement>();
+            int weightToCompare = maxint;
+            foreach (var varr in locationsCanVisit)   //Makes current position the position with the lowest weight
+            {
+                int newCurrentWeight = varr._thisWeight;  //all weights 1***?
+                int isPerm = ContainsFunction(perminant, varr._thisObject);
+                if (newCurrentWeight < weightToCompare && isPerm == maxint)
+                {
+                    currentPosition = varr; //if all the same, current weight still needs to change
+                    weightToCompare = currentPosition._thisWeight;
+                }
+            }
+            perminant.Add(currentPosition._thisObject);
+            currentLocation = currentPosition._thisObject;
+
+
             List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, currentLocation); //currentLocation out of bounds error?
 
             foreach (var square in adjacentLocations)
@@ -173,21 +186,6 @@ public class RMapGenorator : MonoBehaviour
                     NewWeightSetter(square, currentPosition, locationsCanVisit, contains1, distanceFromStartArray); //changes weight if new weight is smaller then current
                 }
             }
-
-            int weightToCompare = maxint;
-            foreach (var varr in locationsCanVisit)   //Makes current position the position with the lowest weight
-            {
-                int newCurrentWeight = varr._thisWeight;  //all weights 1***?
-                int isPerm = ContainsFunction(perminant, varr._thisObject);
-                if (newCurrentWeight < weightToCompare && isPerm==maxint)
-                {
-                    currentPosition = varr; //if all the same, current weight still needs to change
-                    weightToCompare = currentPosition._thisWeight;
-                }
-            }
-            perminant.Add(currentPosition._thisObject);
-            currentLocation = currentPosition._thisObject;
-
 
         } while (currentLocation._x != startDoor._x || currentLocation._y != startDoor._y);
         FindShortestPath(distanceFromStartArray, startDoor, endDoor);
