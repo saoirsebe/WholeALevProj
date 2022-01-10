@@ -24,9 +24,11 @@ public class RoomSpawnPoint : MonoBehaviour
         int locationy = (int)transform.position.y;
 
         int rand = Random.Range(0, objects.Length);
-        GameObject obj = Instantiate(objects[rand],transform.position, Quaternion.identity);//Spawns random room from list
+        GameObject obj = Instantiate(objects[rand],transform.position, Quaternion.identity);//Spawns random room/levelTemplate from list
 
-        if (s1 != null) 
+        string objTag = obj.name;
+
+        if (objTag.StartsWith("R")) //if rooms point not level templatre was spawned
         {
             searchTagDoor = "Door";
             List<ObjectLocation> doors = new List<ObjectLocation>();

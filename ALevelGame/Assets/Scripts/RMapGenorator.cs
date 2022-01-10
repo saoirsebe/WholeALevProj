@@ -186,7 +186,7 @@ public class RMapGenorator : MonoBehaviour
             currentLocation = currentPosition._thisObject;
 
 
-        } while (perminant.Count<10000);
+        } while (currentLocation._x != startDoor._x || currentLocation._y != startDoor._y);
         FindShortestPath(distanceFromStartArray, startDoor, endDoor);
     }
 
@@ -228,25 +228,25 @@ public class RMapGenorator : MonoBehaviour
         int ycurrentPosition = MiddleDoor._y;
         List<PriorityListElement> adjacentLocations = new List<PriorityListElement>();
         ObjectLocation leftSquareObj = new ObjectLocation(xcurrentPosition - 1, ycurrentPosition, 0);
-        if(IsInArray(leftSquareObj))
+        if(IsInArray(leftSquareObj)==true)
         {
             PriorityListElement leftSquare = new PriorityListElement(leftSquareObj, distanceFromStartArray[xcurrentPosition - 1, ycurrentPosition]);
             adjacentLocations.Add(leftSquare);
         }
         ObjectLocation rightSquareObj = new ObjectLocation(xcurrentPosition + 1, ycurrentPosition, 0);
-        if (IsInArray(rightSquareObj))
+        if (IsInArray(rightSquareObj) == true)
         {
             PriorityListElement rightSquare = new PriorityListElement(rightSquareObj, distanceFromStartArray[xcurrentPosition + 1, ycurrentPosition]);
             adjacentLocations.Add(rightSquare);
         }
         ObjectLocation forwardsquareObj = new ObjectLocation(xcurrentPosition, ycurrentPosition + 1, 0);
-        if (IsInArray(forwardsquareObj))
+        if (IsInArray(forwardsquareObj) == true)
         {
             PriorityListElement forwardsquare = new PriorityListElement(forwardsquareObj, distanceFromStartArray[xcurrentPosition, ycurrentPosition + 1]);
             adjacentLocations.Add(forwardsquare);
         }
         ObjectLocation downSquareObj = new ObjectLocation(xcurrentPosition, ycurrentPosition - 1, 0);
-        if (IsInArray(downSquareObj))
+        if (IsInArray(downSquareObj) == true)
         {
             PriorityListElement downSquare = new PriorityListElement(downSquareObj, distanceFromStartArray[xcurrentPosition, ycurrentPosition - 1]);
             adjacentLocations.Add(downSquare);
@@ -257,7 +257,7 @@ public class RMapGenorator : MonoBehaviour
     private bool IsInArray(ObjectLocation square)
     {
         bool contains = false;
-        if (-1 < square._x && square._x <= ArrayMax && -1 < square._y && square._y <= ArrayMax) //if in array
+        if (-1 < square._x && square._x <= ArrayMax-1 && -1 < square._y && square._y <= ArrayMax-1) //if in array
         {
             contains = true;
         }
