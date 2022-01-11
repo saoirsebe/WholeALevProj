@@ -23,7 +23,7 @@ public class RMapGenorator : MonoBehaviour
     private TileMapVisualiser tilemapVisualiser;
     private GameObject thisScript;
     private TileMapVisualiser nextScript;
-    private List<ObjectLocation> doorsVisited;
+    private List<ObjectLocation> doorsVisited = new List<ObjectLocation>();
 
     /// <summary>
     /// 
@@ -123,7 +123,6 @@ public class RMapGenorator : MonoBehaviour
         {
             int endDoorIndex = Random.Range(0, doorsVisited.Count - 1);
             endDoor = doorsVisited[endDoorIndex];
-
         }
         else//picks end door and room from roomslist and doors in that room
         {
@@ -141,7 +140,8 @@ public class RMapGenorator : MonoBehaviour
             }
             doorsVisited.Add(endDoor);
         }
- 
+        
+
         int whereInDoorsNotVisited = ContainsFunction(doorsNotVisited, endDoor);
         if (whereInDoorsNotVisited < MAXINT)
         {
@@ -180,7 +180,7 @@ public class RMapGenorator : MonoBehaviour
         ObjectLocation currentLocation = endDoor;
 
 
-        while(currentLocation._x != startDoor._x || currentLocation._y != startDoor._y)
+        while(perminant.Count<10000)
         {
             int weightToCompare = MAXINT+200;
             foreach (var varr in locationsCanVisit)   //Makes current position the position with the lowest weight
@@ -214,7 +214,6 @@ public class RMapGenorator : MonoBehaviour
                     NewWeightSetter(square, currentPosition, locationsCanVisit, contains1, distanceFromStartArray); //changes weight if new weight is smaller then current
                 }
             }
-
         }
         FindShortestPath(distanceFromStartArray, startDoor, endDoor);
     }
