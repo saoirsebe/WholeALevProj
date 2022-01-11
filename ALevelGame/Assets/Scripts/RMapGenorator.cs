@@ -13,7 +13,6 @@ public class RMapGenorator : MonoBehaviour
     public List<ObjectLocation> wallsList = new List<ObjectLocation>();
 
     private const int maxint = 2147473647;
-    private bool RoorsLeft = true;
     private HashSet<Vector2Int> corridors { get; set; } = new HashSet<Vector2Int>();
     private List<ObjectLocation> doorsNotVisited = new List<ObjectLocation>();
     static int ArrayMax = 100;
@@ -82,14 +81,14 @@ public class RMapGenorator : MonoBehaviour
 
     private void PickStart()
     {
-        int rand1 = Random.Range(0, roomsList.Count-1); //call function to set seed of random at start / random does not work
+        int startRoomIndex = Random.Range(0, roomsList.Count-1); //call function to set seed of random at start / random does not work
         
-        Room roomSt = roomsList[rand1];
+        Room roomSt = roomsList[startRoomIndex];
         List<ObjectLocation> doorsn = roomSt._doors;
-        DoorsInStart(doorsn, rand1);
+        DoorsInStart(doorsn, startRoomIndex);
     }
 
-    private void DoorsInStart(List<ObjectLocation> doorsn, int rand1)
+    private void DoorsInStart(List<ObjectLocation> doorsn, int startRoomIndex)
     {
         if(doorsn.Count>0)
         {
@@ -101,42 +100,72 @@ public class RMapGenorator : MonoBehaviour
                 {
 
                     doorsNotVisited.RemoveAt(whereInDoorsNotVisited);
-                    PickEnd(door, rand1);
+                    PickEnd(door, startRoomIndex);
                 }
+            }
+        }
+        roomsList.RemoveAt(startRoomIndex);
+    }
+
+
+    private void PickEnd(ObjectLocation startDoor, int startRoomIndex)
+    {
+        if (doorsNotVisited.Count == 0 || roomsList.Count==0)
+        {
+
+        }
+        else
+        {
+            ObjectLocation endDoor;
+            int doorsInRoomCount=maxint;
+            int doorChecking = 0;
+            do
+            {
+                doorChecking = 0;
+                List<ObjectLocation> doorsn = pickRoomFunct(startRoomIndex, roomsList);
+                doorsInRoomCount = doorsn.Count;
+                int rand3;
+                ObjectLocation doorCheck;
+                
+                do
+                {
+                    doorChecking += 1;
+                    rand3 = Random.Range(0, doorsn.Count - 1);
+                    doorCheck = doorsn[rand3];
+                } while (ContainsFunction(doorsNotVisited, doorCheck) == maxint && doorChecking != doorsInRoomCount + 1);//if visited already and not all doors in room have been checked and are visited
+                
+                endDoor = doorsn[rand3];
+
+                if (doorChecking == doorsInRoomCount + 1)
+                {
+                    roomsList.RemoveAt(startRoomIndex);
+                }
+
+            } while (doorChecking == doorsInRoomCount + 1); //if it has checked every door in room and they have all been busy then fins another room
+
+            
+
+            
+            int whereInDoorsNotVisited = ContainsFunction(doorsNotVisited, endDoor);
+            if (whereInDoorsNotVisited < maxint)
+            {
+                doorsNotVisited.RemoveAt(whereInDoorsNotVisited);
+                MakeDistanceFromEndArray(startDoor, endDoor);
             }
         }
     }
 
-
-    private void PickEnd(ObjectLocation startDoor, int rand1)
+    private List<ObjectLocation> pickRoomFunct(int rand1, List<Room> roomsList)
     {
-        int rand2;
+        int endRoomIndex;
         do
         {
-            rand2 = Random.Range(0, roomsList.Count-1);
-        } while (rand2 == rand1);                 //While random number is the same as the location of the startRoom in roomsList pick another number
-
-        Room roomEn = roomsList[rand2];
+            endRoomIndex = Random.Range(0, roomsList.Count - 1);
+        } while (endRoomIndex == rand1);   //While random number is the same as the location of the startRoom in roomsList pick another number
+        Room roomEn = roomsList[endRoomIndex];
         List<ObjectLocation> doorsn = roomEn._doors;
-
-        int rand3;
-        ObjectLocation doorCheck;
-        do
-        {
-            rand3 = Random.Range(0, doorsn.Count - 1);
-            doorCheck = doorsn[rand3];
-        } while (ContainsFunction(doorsNotVisited, doorCheck) == maxint);
-        ObjectLocation endDoor = doorsn[rand3];
-
-        int whereInDoorsNotVisited = ContainsFunction(doorsNotVisited, endDoor);
-        if (whereInDoorsNotVisited<maxint)
-        {
-            doorsNotVisited.RemoveAt(whereInDoorsNotVisited);
-            MakeDistanceFromEndArray(startDoor, endDoor);
-        }
+        return doorsn;
     }
-
-
 
     private void MakeDistanceFromEndArray(ObjectLocation startDoor,ObjectLocation endDoor)
     {
