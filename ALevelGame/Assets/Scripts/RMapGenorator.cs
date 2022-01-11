@@ -20,7 +20,9 @@ public class RMapGenorator : MonoBehaviour
     private int roomsMade;
 
     [SerializeField]
-    private TilemapVisualiser tilemapVisualiser;
+    private TileMapVisualiser tilemapVisualiser;
+    private GameObject thisScript;
+    private TileMapVisualiser nextScript;
 
     public void AddToRoomsMade()
     {
@@ -72,7 +74,7 @@ public class RMapGenorator : MonoBehaviour
     public void StartShortestPathAlgorithm()
     {
         //Picks start room after 3 rooms are made and there are still doors to visit
-        while (roomsMade == 3 && doorsNotVisited.Count > 0)
+        while (roomsMade == 4 && doorsNotVisited.Count > 0)
         {
             PickStart(); 
         } 
@@ -112,7 +114,7 @@ public class RMapGenorator : MonoBehaviour
     {
         if (doorsNotVisited.Count == 0 || roomsList.Count==0)
         {
-
+            //int endDoorIndex = randomdoor
         }
         else
         {
@@ -124,26 +126,24 @@ public class RMapGenorator : MonoBehaviour
                 doorChecking = 0;
                 List<ObjectLocation> doorsn = pickRoomFunct(startRoomIndex, roomsList);
                 doorsInRoomCount = doorsn.Count;
-                int rand3;
+                int endRoomIndex;
                 ObjectLocation doorCheck;
                 
                 do
                 {
                     doorChecking += 1;
-                    rand3 = Random.Range(0, doorsn.Count - 1);
-                    doorCheck = doorsn[rand3];
-                } while (ContainsFunction(doorsNotVisited, doorCheck) == maxint && doorChecking != doorsInRoomCount + 1);//if visited already and not all doors in room have been checked and are visited
+                    endRoomIndex = Random.Range(0, doorsn.Count - 1);
+                    doorCheck = doorsn[endRoomIndex];
+                } while (ContainsFunction(doorsNotVisited, doorCheck) == maxint && doorChecking != doorsn.Count + 1);//if visited already and not all doors in room have been checked and are visited
                 
-                endDoor = doorsn[rand3];
+                endDoor = doorsn[endRoomIndex];
 
-                if (doorChecking == doorsInRoomCount + 1)
+                if (doorChecking == doorsn.Count + 1)
                 {
                     roomsList.RemoveAt(startRoomIndex);
                 }
 
             } while (doorChecking == doorsInRoomCount + 1); //if it has checked every door in room and they have all been busy then fins another room
-
-            
 
             
             int whereInDoorsNotVisited = ContainsFunction(doorsNotVisited, endDoor);
@@ -354,13 +354,16 @@ public class RMapGenorator : MonoBehaviour
             thisDoor = nextSquare;
             finalVisited.Add(thisDoor);
         }
+        runProceduralGeneration(corridors);
     }
 
-    public void runProceduralGeneration()
+    public void runProceduralGeneration(HashSet<Vector2Int> floorPositions)
     {
-        HashSet<Vector2Int> floorPositions = corridors;
-        tilemapVisualiser.Clear();
-        tilemapVisualiser.paintFloorTiles(floorPositions);
+        thisScript = GameObject.Find("TileMapVisualiser");
+        nextScript = thisScript.GetComponent<TileMapVisualiser>(); // breakpoint stops but wont go to next breakpoint (object reference not set to an instance of an object)
+        IEnumerable<Vector2Int> positions = floorPositions; 
+        nextScript.paintFloorTiles(positions); 
+        
     }
 }
 
