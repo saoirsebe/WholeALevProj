@@ -173,14 +173,16 @@ public class RMapGenorator : MonoBehaviour
             Debug.LogError("MakeDistanceFromEndArray: endDoor out of bounds of array");
         }
         
-       
+        //Starts at endDoor:
         PriorityListElement currentPosition = new PriorityListElement(endDoor, MAXINT);
         locationsCanVisit.Add(currentPosition);
         distanceFromStartArray[startDoor._x, startDoor._y] = 0;
         ObjectLocation currentLocation = endDoor;
+
+
         while(currentLocation._x != startDoor._x || currentLocation._y != startDoor._y)
         {
-            int weightToCompare = MAXINT;
+            int weightToCompare = MAXINT+200;
             foreach (var varr in locationsCanVisit)   //Makes current position the position with the lowest weight
             {
                 int newCurrentWeight = varr._thisWeight;  //all weights 1***?
