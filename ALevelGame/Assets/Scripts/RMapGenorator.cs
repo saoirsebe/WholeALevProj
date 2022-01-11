@@ -152,7 +152,7 @@ public class RMapGenorator : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Starts at endDoor and makes a distanceFromStartArray by stepping one each time and updating the next weight if the weight of previous plus weight to move is less then the weight there
     /// </summary>
     /// <param name="startDoor"></param>
     /// <param name="endDoor"></param>
@@ -161,17 +161,10 @@ public class RMapGenorator : MonoBehaviour
         List<ObjectLocation> perminant = new List<ObjectLocation>();
         List<PriorityListElement> locationsCanVisit = new List<PriorityListElement>();
 
-        int[,] distanceFromStartArray = new int[ARRAYMAX, ARRAYMAX];
-        for (int x = 0; x < ARRAYMAX; x++)
-        {
-            for (int y = 0; y < ARRAYMAX; y++)
-            {
-                distanceFromStartArray[x, y] = MAXINT;
-            }
-        }
-        
+        int[,] distanceFromStartArray = MakeEmptyMakeDistanceFromEndArray(); //Makes array ARRAYMAX by ARRAYMAX where all squares are MAXINT
+
         //Validation
-        if(IsInBoundsOfArray(endDoor))
+        if (IsInBoundsOfArray(endDoor))
         {
             distanceFromStartArray[endDoor._x, endDoor._y] = 0;
         }
@@ -222,6 +215,19 @@ public class RMapGenorator : MonoBehaviour
 
         }
         FindShortestPath(distanceFromStartArray, startDoor, endDoor);
+    }
+
+    private int[,] MakeEmptyMakeDistanceFromEndArray()
+    {
+        int[,] distanceFromStartArray = new int[ARRAYMAX, ARRAYMAX];
+        for (int x = 0; x < ARRAYMAX; x++)
+        {
+            for (int y = 0; y < ARRAYMAX; y++)
+            {
+                distanceFromStartArray[x, y] = MAXINT;
+            }
+        }
+        return distanceFromStartArray;
     }
 
     private int ContainsFunctionPLE(List<PriorityListElement> listToCheck, PriorityListElement isItemIn)
