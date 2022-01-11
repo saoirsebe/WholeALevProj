@@ -202,6 +202,10 @@ public class RMapGenorator : MonoBehaviour
             perminant.Add(currentPosition._thisObject);
             currentLocation = currentPosition._thisObject;
 
+            if(currentLocation._x != startDoor._x || currentLocation._y != startDoor._y)
+            {
+                break;
+            }
 
             List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, currentLocation); //currentLocation out of bounds error?
 
@@ -285,6 +289,11 @@ public class RMapGenorator : MonoBehaviour
         return adjacentLocations;
     }
 
+    /// <summary> Checks if square is in the bounds of the array (returns true or false)
+    /// 
+    /// </summary>
+    /// <param name="square"></param> The square that is checked if it is in the array
+    /// <returns></returns>
     private bool IsInArray(ObjectLocation square)
     {
         bool contains = false;
@@ -295,6 +304,15 @@ public class RMapGenorator : MonoBehaviour
         return contains;
     }
 
+
+    /// <summary> Sets a new weight (in distanceFromStartArray) to the location if the location that has just been visited plus the weight of moving to that location is less then the weight already at the location
+    /// 
+    /// </summary>
+    /// <param name="newWeightSquare"></param> The square that may need changing weight
+    /// <param name="currentPosition"></param> The current position thet the algorithm has visited
+    /// <param name="locationsCanVisit"></param> List of locations that are adjacent to the visited locations
+    /// <param name="contains"></param>
+    /// <param name="distanceFromStartArray"></param>
     private void NewWeightSetter(PriorityListElement newWeightSquare, PriorityListElement currentPosition, List<PriorityListElement> locationsCanVisit, int contains, int[,] distanceFromStartArray)
     {
         ObjectLocation squareObj = newWeightSquare._thisObject; //currentposition and square are equal**** sometimes (contains function prob)
@@ -328,6 +346,12 @@ public class RMapGenorator : MonoBehaviour
         }
     }
 
+    /// <summary> Steps through distanceFromStartArray starting at startDoor and picking the lowest weight adjacent square each time untill the endDoor is reached
+    /// 
+    /// </summary>
+    /// <param name="distanceFromStartArray"></param> The array that tells you the number of steps of each square away from start door
+    /// <param name="startDoor"></param> The door that the shortest path finder starts at
+    /// <param name="endDoor"></param> The door that the shortest path finder ends at
     private void FindShortestPath(int[,] distanceFromStartArray, ObjectLocation startDoor, ObjectLocation endDoor)
     {
         List<ObjectLocation> finalVisited = new List<ObjectLocation>();
