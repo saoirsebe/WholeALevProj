@@ -12,26 +12,30 @@ public class RMapGenorator : MonoBehaviour
     public Room Room;
     public List<ObjectLocation> wallsList = new List<ObjectLocation>();
 
-    private const int maxint = 2147473647;
+    private const int MAXINT = 2147473647;
     private HashSet<Vector2Int> corridors { get; set; } = new HashSet<Vector2Int>();
     private List<ObjectLocation> doorsNotVisited = new List<ObjectLocation>();
-    static int ArrayMax = 100;
-    private int[,] WeightToMoveArray = new int[ArrayMax, ArrayMax];
+    public const int ARRAYMAX = 100;
+    private int[,] WeightToMoveArray = new int[ARRAYMAX, ARRAYMAX];
     private int roomsMade;
 
     [SerializeField]
     private TileMapVisualiser tilemapVisualiser;
     private GameObject thisScript;
     private TileMapVisualiser nextScript;
+    private List<ObjectLocation> doorsVisited;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void AddToRoomsMade()
     {
         roomsMade += 1;
         if (roomsMade == 4)
         {
-            for (int x = 0; x < ArrayMax; x++)
+            for (int x = 0; x < ARRAYMAX; x++)
             {
-                for (int y = 0; y < ArrayMax; y++)
+                for (int y = 0; y < ARRAYMAX; y++)
                 {
                     WeightToMoveArray[x, y] = 1;
                 }
@@ -42,13 +46,12 @@ public class RMapGenorator : MonoBehaviour
                 int wally = wall._y;
                 if(wallx<=100 && wally<=100)
                 {
-                    WeightToMoveArray[wallx, wally] = maxint; //Set locations of walls in array to max int so weight of moving ples prev location will be max and not picked
+                    WeightToMoveArray[wallx, wally] = MAXINT; //Set locations of walls in array to max int so weight of moving ples prev location will be max and not picked
                 }
             }
-
             ObjectLocation doorStart = new ObjectLocation(21, 15, 0);
             
-            PickEnd(doorStart, maxint);
+            PickEnd(doorStart);
             StartShortestPathAlgorithm();
         }
     }
@@ -84,116 +87,112 @@ public class RMapGenorator : MonoBehaviour
     private void PickStart()
     {
         int startRoomIndex = Random.Range(0, roomsList.Count-1); //call function to set seed of random at start / random does not work
-        
         Room roomSt = roomsList[startRoomIndex];
         List<ObjectLocation> doorsn = roomSt._doors;
-        DoorsInStart(doorsn, startRoomIndex);
+        roomsList.RemoveAt(startRoomIndex);
+        DoorsInStart(doorsn);
     }
 
-    private void DoorsInStart(List<ObjectLocation> doorsn, int startRoomIndex)
+    private void DoorsInStart(List<ObjectLocation> doorsn)
     {
         if(doorsn.Count>0)
         {
+            //for each door in the room: remove from doorsn, remove from doorsNotVisited and add to doorsVisited
             foreach (var door in doorsn)
             {
                 //if door was in doorsNotVisited removes and runs pickend
+                int whereInDoorsN = ContainsFunction(doorsn, door);
+                doorsn.RemoveAt(whereInDoorsN);
                 int whereInDoorsNotVisited = ContainsFunction(doorsNotVisited, door);
-                if (whereInDoorsNotVisited < maxint)
-                {
-
-                    doorsNotVisited.RemoveAt(whereInDoorsNotVisited);
-                    PickEnd(door, startRoomIndex);
-                }
-            }
-        }
-        roomsList.RemoveAt(startRoomIndex);
-    }
-
-
-    private void PickEnd(ObjectLocation startDoor, int startRoomIndex)
-    {
-        if (doorsNotVisited.Count == 0 || roomsList.Count==0)
-        {
-            //int endDoorIndex = randomdoor
-        }
-        else
-        {
-            ObjectLocation endDoor;
-            int doorsInRoomCount=maxint;
-            int doorChecking = 0;
-            do
-            {
-                doorChecking = 0;
-                List<ObjectLocation> doorsn = pickRoomFunct(startRoomIndex, roomsList);
-                doorsInRoomCount = doorsn.Count;
-                int endRoomIndex;
-                ObjectLocation doorCheck;
-                
-                do
-                {
-                    doorChecking += 1;
-                    endRoomIndex = Random.Range(0, doorsn.Count - 1);
-                    doorCheck = doorsn[endRoomIndex];
-                } while (ContainsFunction(doorsNotVisited, doorCheck) == maxint && doorChecking != doorsn.Count + 1);//if visited already and not all doors in room have been checked and are visited
-                
-                endDoor = doorsn[endRoomIndex];
-
-                if (doorChecking == doorsn.Count + 1)
-                {
-                    roomsList.RemoveAt(startRoomIndex);
-                }
-
-            } while (doorChecking == doorsInRoomCount + 1); //if it has checked every door in room and they have all been busy then fins another room
-
-            
-            int whereInDoorsNotVisited = ContainsFunction(doorsNotVisited, endDoor);
-            if (whereInDoorsNotVisited < maxint)
-            {
                 doorsNotVisited.RemoveAt(whereInDoorsNotVisited);
-                MakeDistanceFromEndArray(startDoor, endDoor);
+                doorsVisited.Add(door);
+                PickEnd(door);
+                
             }
         }
     }
 
-    private List<ObjectLocation> pickRoomFunct(int rand1, List<Room> roomsList)
+    /// <summary>
+    /// Picks the end room and the end door in that room and then runs MakeDistanceFromEndArray
+    /// </summary>
+    /// <param name="startDoor"></param>
+    private void PickEnd(ObjectLocation startDoor)
     {
-        int endRoomIndex;
-        do
+        ObjectLocation endDoor;
+        if (doorsNotVisited.Count == 0 || roomsList.Count == 0)
         {
-            endRoomIndex = Random.Range(0, roomsList.Count - 1);
-        } while (endRoomIndex == rand1);   //While random number is the same as the location of the startRoom in roomsList pick another number
-        Room roomEn = roomsList[endRoomIndex];
-        List<ObjectLocation> doorsn = roomEn._doors;
-        return doorsn;
+            int endDoorIndex = Random.Range(0, doorsVisited.Count - 1);
+            endDoor = doorsVisited[endDoorIndex];
+
+        }
+        else//picks end door and room from roomslist and doors in that room
+        {
+            int endRoomIndex = Random.Range(0, roomsList.Count - 1);
+            Room roomEn = roomsList[endRoomIndex];
+            List<ObjectLocation> doorsn = roomEn._doors;
+            int endDoorIndex = Random.Range(0, doorsn.Count - 1);
+            endDoor = doorsn[endDoorIndex];
+            doorsn.RemoveAt(endDoorIndex);
+
+            //if there is now no doors in this room then remove it from the list of possible rooms to visit
+            if (doorsn.Count == 0)
+            {
+                roomsList.RemoveAt(endRoomIndex);
+            }
+            doorsVisited.Add(endDoor);
+        }
+ 
+        int whereInDoorsNotVisited = ContainsFunction(doorsNotVisited, endDoor);
+        if (whereInDoorsNotVisited < MAXINT)
+        {
+            doorsNotVisited.RemoveAt(whereInDoorsNotVisited);
+        }
+
+        MakeDistanceFromEndArray(startDoor, endDoor);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="startDoor"></param>
+    /// <param name="endDoor"></param>
     private void MakeDistanceFromEndArray(ObjectLocation startDoor,ObjectLocation endDoor)
     {
         List<ObjectLocation> perminant = new List<ObjectLocation>();
         List<PriorityListElement> locationsCanVisit = new List<PriorityListElement>();
 
-        int[,] distanceFromStartArray = new int[ArrayMax, ArrayMax];
-        for (int x = 0; x < ArrayMax; x++)
+        int[,] distanceFromStartArray = new int[ARRAYMAX, ARRAYMAX];
+        for (int x = 0; x < ARRAYMAX; x++)
         {
-            for (int y = 0; y < ArrayMax; y++)
+            for (int y = 0; y < ARRAYMAX; y++)
             {
-                distanceFromStartArray[x, y] = maxint;
+                distanceFromStartArray[x, y] = MAXINT;
             }
         }
-        distanceFromStartArray[endDoor._x, endDoor._y] = 0;
+        
+        //Validation
+        if(IsInBoundsOfArray(endDoor))
+        {
+            distanceFromStartArray[endDoor._x, endDoor._y] = 0;
+        }
+        else
+        {
+            Debug.LogError("MakeDistanceFromEndArray: endDoor out of bounds of array");
+        }
+        
        
-        PriorityListElement currentPosition = new PriorityListElement(endDoor, maxint);
+        PriorityListElement currentPosition = new PriorityListElement(endDoor, MAXINT);
         locationsCanVisit.Add(currentPosition);
         distanceFromStartArray[startDoor._x, startDoor._y] = 0;
         ObjectLocation currentLocation = endDoor;
         while(currentLocation._x != startDoor._x || currentLocation._y != startDoor._y)
         {
-            int weightToCompare = maxint;
+            int weightToCompare = MAXINT;
             foreach (var varr in locationsCanVisit)   //Makes current position the position with the lowest weight
             {
                 int newCurrentWeight = varr._thisWeight;  //all weights 1***?
                 int isPerm = ContainsFunction(perminant, varr._thisObject);
-                if (newCurrentWeight < weightToCompare && isPerm == maxint)
+                if (newCurrentWeight < weightToCompare && isPerm == MAXINT)
                 {
                     currentPosition = varr; //if all the same, current weight still needs to change
                     weightToCompare = currentPosition._thisWeight;
@@ -202,7 +201,7 @@ public class RMapGenorator : MonoBehaviour
             perminant.Add(currentPosition._thisObject);
             currentLocation = currentPosition._thisObject;
 
-            if(currentLocation._x != startDoor._x || currentLocation._y != startDoor._y)
+            if(currentLocation._x == startDoor._x && currentLocation._y == startDoor._y)
             {
                 break;
             }
@@ -214,7 +213,7 @@ public class RMapGenorator : MonoBehaviour
                 ObjectLocation squareObj = square._thisObject;
 
                 int isPerm = ContainsFunction(perminant, squareObj);
-                if (isPerm == maxint) //if not perminant/visited
+                if (isPerm == MAXINT) //if not perminant/visited
                 {
                     int contains1 = ContainsFunctionPLE(locationsCanVisit,square); 
                     NewWeightSetter(square, currentPosition, locationsCanVisit, contains1, distanceFromStartArray); //changes weight if new weight is smaller then current
@@ -228,7 +227,7 @@ public class RMapGenorator : MonoBehaviour
     private int ContainsFunctionPLE(List<PriorityListElement> listToCheck, PriorityListElement isItemIn)
     {
         ObjectLocation isItemInObj = isItemIn._thisObject;
-        int whereItContains = maxint;
+        int whereItContains = MAXINT;
         int counter = 0;
         foreach (var item in listToCheck)
         {
@@ -244,7 +243,7 @@ public class RMapGenorator : MonoBehaviour
 
     private int ContainsFunction(List<ObjectLocation> listToCheck,ObjectLocation isItemIn)//return where in list it is and maxint is its not
     {
-        int whereItContains = maxint;
+        int whereItContains = MAXINT;
         int counter = 0;
         foreach (var item in listToCheck)
         {
@@ -263,25 +262,25 @@ public class RMapGenorator : MonoBehaviour
         int ycurrentPosition = MiddleDoor._y;
         List<PriorityListElement> adjacentLocations = new List<PriorityListElement>();
         ObjectLocation leftSquareObj = new ObjectLocation(xcurrentPosition - 1, ycurrentPosition, 0);
-        if(IsInArray(leftSquareObj)==true)
+        if(IsInBoundsOfArray(leftSquareObj)==true)
         {
             PriorityListElement leftSquare = new PriorityListElement(leftSquareObj, distanceFromStartArray[xcurrentPosition - 1, ycurrentPosition]);
             adjacentLocations.Add(leftSquare);
         }
         ObjectLocation rightSquareObj = new ObjectLocation(xcurrentPosition + 1, ycurrentPosition, 0);
-        if (IsInArray(rightSquareObj) == true)
+        if (IsInBoundsOfArray(rightSquareObj) == true)
         {
             PriorityListElement rightSquare = new PriorityListElement(rightSquareObj, distanceFromStartArray[xcurrentPosition + 1, ycurrentPosition]);
             adjacentLocations.Add(rightSquare);
         }
         ObjectLocation forwardsquareObj = new ObjectLocation(xcurrentPosition, ycurrentPosition + 1, 0);
-        if (IsInArray(forwardsquareObj) == true)
+        if (IsInBoundsOfArray(forwardsquareObj) == true)
         {
             PriorityListElement forwardsquare = new PriorityListElement(forwardsquareObj, distanceFromStartArray[xcurrentPosition, ycurrentPosition + 1]);
             adjacentLocations.Add(forwardsquare);
         }
         ObjectLocation downSquareObj = new ObjectLocation(xcurrentPosition, ycurrentPosition - 1, 0);
-        if (IsInArray(downSquareObj) == true)
+        if (IsInBoundsOfArray(downSquareObj) == true)
         {
             PriorityListElement downSquare = new PriorityListElement(downSquareObj, distanceFromStartArray[xcurrentPosition, ycurrentPosition - 1]);
             adjacentLocations.Add(downSquare);
@@ -289,15 +288,15 @@ public class RMapGenorator : MonoBehaviour
         return adjacentLocations;
     }
 
-    /// <summary> Checks if square is in the bounds of the array (returns true or false)
-    /// 
+    /// <summary> 
+    /// Checks if square is in the bounds of the array (returns true or false)
     /// </summary>
     /// <param name="square"></param> The square that is checked if it is in the array
     /// <returns></returns>
-    private bool IsInArray(ObjectLocation square)
+    private bool IsInBoundsOfArray(ObjectLocation square)
     {
         bool contains = false;
-        if (-1 < square._x && square._x <= ArrayMax-1 && -1 < square._y && square._y <= ArrayMax-1) //if in array
+        if (-1 < square._x && square._x <= ARRAYMAX-1 && -1 < square._y && square._y <= ARRAYMAX-1) //if in array
         {
             contains = true;
         }
@@ -305,8 +304,8 @@ public class RMapGenorator : MonoBehaviour
     }
 
 
-    /// <summary> Sets a new weight (in distanceFromStartArray) to the location if the location that has just been visited plus the weight of moving to that location is less then the weight already at the location
-    /// 
+    /// <summary> 
+    /// Sets a new weight (in distanceFromStartArray) to the location if the location that has just been visited plus the weight of moving to that location is less then the weight already at the location
     /// </summary>
     /// <param name="newWeightSquare"></param> The square that may need changing weight
     /// <param name="currentPosition"></param> The current position thet the algorithm has visited
@@ -329,7 +328,7 @@ public class RMapGenorator : MonoBehaviour
             distanceFromStartArray[squarex, squarey] = possibleNewWeight; //If previous squares weight plus weight to move to this square is less then the weight at the square now then change weight to new weight
 
             int whereInLocationsCanVisit = ContainsFunctionPLE(locationsCanVisit, newWeightSquare);
-            if (whereInLocationsCanVisit<maxint)
+            if (whereInLocationsCanVisit<MAXINT)
             {
                 locationsCanVisit.RemoveAt(whereInLocationsCanVisit);
             }
@@ -339,15 +338,15 @@ public class RMapGenorator : MonoBehaviour
         }
         else
         {
-            if (contains == maxint) //if surrounding tile in not in locationsCanVisit then add it
+            if (contains == MAXINT) //if surrounding tile in not in locationsCanVisit then add it
             {
                 locationsCanVisit.Add(newWeightSquare);
             }
         }
     }
 
-    /// <summary> Steps through distanceFromStartArray starting at startDoor and picking the lowest weight adjacent square each time untill the endDoor is reached
-    /// 
+    /// <summary> 
+    /// Steps through distanceFromStartArray starting at startDoor and picking the lowest weight adjacent square each time untill the endDoor is reached
     /// </summary>
     /// <param name="distanceFromStartArray"></param> The array that tells you the number of steps of each square away from start door
     /// <param name="startDoor"></param> The door that the shortest path finder starts at
@@ -356,7 +355,7 @@ public class RMapGenorator : MonoBehaviour
     {
         List<ObjectLocation> finalVisited = new List<ObjectLocation>();
         ObjectLocation thisDoor = startDoor;
-        distanceFromStartArray[startDoor._x, startDoor._y] = maxint;
+        distanceFromStartArray[startDoor._x, startDoor._y] = MAXINT;
         distanceFromStartArray[endDoor._x, endDoor._y] = 0;
         ObjectLocation nextSquare = thisDoor;
 
@@ -364,10 +363,10 @@ public class RMapGenorator : MonoBehaviour
         {
             List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, thisDoor);
 
-            int nextWeight = maxint;
+            int nextWeight = MAXINT;
             foreach (var square in adjacentLocations)
             {
-                if (square._thisWeight<nextWeight && ContainsFunction(finalVisited,square._thisObject)==maxint)
+                if (square._thisWeight<nextWeight && ContainsFunction(finalVisited,square._thisObject)==MAXINT)
                 {
                     nextWeight = square._thisWeight;
                     nextSquare = square._thisObject;
@@ -382,6 +381,10 @@ public class RMapGenorator : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="floorPositions"></param>
     public void runProceduralGeneration(HashSet<Vector2Int> floorPositions)
     {
         thisScript = GameObject.Find("TileMapVisualiser");
