@@ -20,6 +20,9 @@ public class RMapGenorator : MonoBehaviour
     private int[,] WeightToMoveArray = new int[ArrayMax, ArrayMax];
     private int roomsMade;
 
+    [SerializeField]
+    private TilemapVisualiser tilemapVisualiser;
+
     public void AddToRoomsMade()
     {
         roomsMade += 1;
@@ -70,7 +73,7 @@ public class RMapGenorator : MonoBehaviour
     public void StartShortestPathAlgorithm()
     {
         //Picks start room after 3 rooms are made and there are still doors to visit
-        while (roomsMade == 3 & RoorsLeft & doorsNotVisited.Count > 0)
+        while (roomsMade == 3 && doorsNotVisited.Count > 0)
         {
             PickStart(); 
         } 
@@ -322,6 +325,13 @@ public class RMapGenorator : MonoBehaviour
             thisDoor = nextSquare;
             finalVisited.Add(thisDoor);
         }
+    }
+
+    public void runProceduralGeneration()
+    {
+        HashSet<Vector2Int> floorPositions = corridors;
+        tilemapVisualiser.Clear();
+        tilemapVisualiser.paintFloorTiles(floorPositions);
     }
 }
 
