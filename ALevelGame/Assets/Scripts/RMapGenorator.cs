@@ -169,7 +169,6 @@ public class RMapGenorator : MonoBehaviour
 
     private void MakeDistanceFromEndArray(ObjectLocation startDoor,ObjectLocation endDoor)
     {
-        
         List<ObjectLocation> perminant = new List<ObjectLocation>();
         List<PriorityListElement> locationsCanVisit = new List<PriorityListElement>();
 
@@ -181,7 +180,6 @@ public class RMapGenorator : MonoBehaviour
                 distanceFromStartArray[x, y] = maxint;
             }
         }
-       
         distanceFromStartArray[endDoor._x, endDoor._y] = 0;
        
         PriorityListElement currentPosition = new PriorityListElement(endDoor, maxint);
@@ -334,12 +332,14 @@ public class RMapGenorator : MonoBehaviour
     {
         List<ObjectLocation> finalVisited = new List<ObjectLocation>();
         ObjectLocation thisDoor = startDoor;
+        distanceFromStartArray[startDoor._x, startDoor._y] = maxint;
         distanceFromStartArray[endDoor._x, endDoor._y] = 0;
         ObjectLocation nextSquare = thisDoor;
 
         while (thisDoor._x != endDoor._x || thisDoor._y != endDoor._y)//if hasnt reached end door
         {
             List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, thisDoor);
+
             int nextWeight = maxint;
             foreach (var square in adjacentLocations)
             {
@@ -356,6 +356,7 @@ public class RMapGenorator : MonoBehaviour
         }
         runProceduralGeneration(corridors);
     }
+
 
     public void runProceduralGeneration(HashSet<Vector2Int> floorPositions)
     {
