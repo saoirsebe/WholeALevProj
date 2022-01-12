@@ -164,7 +164,7 @@ public class RMapGenorator : MonoBehaviour
         int[,] distanceFromStartArray = MakeEmptyMakeDistanceFromEndArray(); //Makes array ARRAYMAX by ARRAYMAX where all squares are MAXINT
 
         //Validation
-        if (IsInBoundsOfArray(endDoor))
+        if (IsInBoundsOfArray(endDoor)==true)
         {
             distanceFromStartArray[endDoor._x, endDoor._y] = 0;
         }
@@ -194,6 +194,7 @@ public class RMapGenorator : MonoBehaviour
             }
             perminant.Add(currentPosition._thisObject);
             currentLocation = currentPosition._thisObject;
+            locationsCanVisit.RemoveAt(ContainsFunctionPLE(locationsCanVisit,currentPosition));
 
 
             List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, currentLocation); //currentLocation out of bounds error?
@@ -326,7 +327,6 @@ public class RMapGenorator : MonoBehaviour
         int possibleNewWeight = prevWeight + WeightToMoveArray[squarex, squarey];
         if (currentWeight > possibleNewWeight)
         {
-
             distanceFromStartArray[squarex, squarey] = possibleNewWeight; //If previous squares weight plus weight to move to this square is less then the weight at the square now then change weight to new weight
 
             int whereInLocationsCanVisit = ContainsFunctionPLE(locationsCanVisit, newWeightSquare);
