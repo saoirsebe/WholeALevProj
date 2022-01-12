@@ -94,16 +94,18 @@ public class RMapGenorator : MonoBehaviour
         DoorsInStart(doorsn);
     }
 
+    /// <summary>
+    /// for n of doors in the room:pick first door remove from doorsn, remove from doorsNotVisited and add to doorsVisited then run PickEnd
+    /// </summary>
+    /// <param name="doorsn"></param>List of the doors in startRoom
     private void DoorsInStart(List<ObjectLocation> doorsn)
     {
         if(doorsn.Count>0)
         {
-            //for each door in the room: remove from doorsn, remove from doorsNotVisited and add to doorsVisited
-            foreach (var door in doorsn)
+            for (int x = 0; x < doorsn.Count; x++)
             {
-                //if door was in doorsNotVisited removes and runs pickend
-                int whereInDoorsN = ContainsFunction(doorsn, door);
-                doorsn.RemoveAt(whereInDoorsN);
+                ObjectLocation door = doorsn[0];
+                doorsn.RemoveAt(0);
                 int whereInDoorsNotVisited = ContainsFunction(doorsNotVisited, door);
                 doorsNotVisited.RemoveAt(whereInDoorsNotVisited);
                 doorsVisited.Add(door);
