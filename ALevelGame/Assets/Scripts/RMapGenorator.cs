@@ -176,7 +176,6 @@ public class RMapGenorator : MonoBehaviour
         //Starts at endDoor:
         PriorityListElement currentPosition = new PriorityListElement(endDoor, MAXINT);
         locationsCanVisit.Add(currentPosition);
-        distanceFromStartArray[startDoor._x, startDoor._y] = 0;
         ObjectLocation currentLocation = endDoor;
 
 
@@ -196,10 +195,6 @@ public class RMapGenorator : MonoBehaviour
             perminant.Add(currentPosition._thisObject);
             currentLocation = currentPosition._thisObject;
 
-            if(currentLocation._x == startDoor._x && currentLocation._y == startDoor._y)
-            {
-                break;
-            }
 
             List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, currentLocation); //currentLocation out of bounds error?
 
