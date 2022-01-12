@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+
 public class RMapGenorator : MonoBehaviour
 {
     public GameObject[] nodes;
@@ -107,7 +108,6 @@ public class RMapGenorator : MonoBehaviour
                 doorsNotVisited.RemoveAt(whereInDoorsNotVisited);
                 doorsVisited.Add(door);
                 PickEnd(door);
-                
             }
         }
     }
@@ -161,6 +161,9 @@ public class RMapGenorator : MonoBehaviour
         List<ObjectLocation> perminant = new List<ObjectLocation>();
         List<PriorityListElement> locationsCanVisit = new List<PriorityListElement>();
 
+        List<int> locationsCanVisitWeightsList = new List<int>();
+
+
         int[,] distanceFromStartArray = MakeEmptyMakeDistanceFromEndArray(); //Makes array ARRAYMAX by ARRAYMAX where all squares are MAXINT
 
         //Validation
@@ -176,12 +179,32 @@ public class RMapGenorator : MonoBehaviour
         //Starts at endDoor:
         PriorityListElement currentPosition = new PriorityListElement(endDoor, MAXINT);
         locationsCanVisit.Add(currentPosition);
-        ObjectLocation currentLocation = endDoor;
+        locationsCanVisitWeightsList.Add(currentPosition._thisWeight);
 
 
         while(perminant.Count<10000)
         {
-            int weightToCompare = MAXINT+200;
+            //int weightToCompare = MAXINT+200;
+
+            //PriorityListElement smallest = from PriorityListElement item in locationsCanVisit select item._thisWeight.Min();
+
+            //finds index of smallest in locationsCanVisit, sets as currentPosition and then removes this index from locationsCanVisitWeightsList and locationsCanVisit
+            int indexOfSmallest =0;
+            int smallestWeightInLocationsCanVisit = locationsCanVisitWeightsList.Min();
+            foreach(var weight in locationsCanVisitWeightsList)
+            {
+                if( weight == smallestWeightInLocationsCanVisit)
+                {
+                    indexOfSmallest = locationsCanVisitWeightsList.IndexOf(weight);
+                }
+            }
+            
+            currentPosition = locationsCanVisit[indexOfSmallest];
+            perminant.Add(currentPosition._thisObject);
+            locationsCanVisit.RemoveAt(indexOfSmallest);
+            locationsCanVisitWeightsList.RemoveAt(indexOfSmallest);
+
+            /*
             foreach (var varr in locationsCanVisit)   //Makes current position the position with the lowest weight
             {
                 int newCurrentWeight = varr._thisWeight;  //all weights 1***?
@@ -194,10 +217,11 @@ public class RMapGenorator : MonoBehaviour
             }
             perminant.Add(currentPosition._thisObject);
             currentLocation = currentPosition._thisObject;
-            locationsCanVisit.RemoveAt(ContainsFunctionPLE(locationsCanVisit,currentPosition));
+            locationsCanVisit.RemoveAt(ContainsFunctionPLE(locationsCanVisit,currentPosition));*/
 
 
-            List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, currentLocation); //currentLocation out of bounds error?
+
+            List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, currentPosition._thisObject); //currentLocation out of bounds error?
 
             foreach (var square in adjacentLocations)
             {
@@ -207,7 +231,7 @@ public class RMapGenorator : MonoBehaviour
                 if (isPerm == MAXINT) //if not perminant/visited
                 {
                     int contains1 = ContainsFunctionPLE(locationsCanVisit,square); 
-                    NewWeightSetter(square, currentPosition, locationsCanVisit, contains1, distanceFromStartArray); //changes weight if new weight is smaller then current
+                    NewWeightSetter(square, currentPosition, locationsCanVisit, locationsCanVisitWeightsList, contains1, distanceFromStartArray); //changes weight if new weight is smaller then current
                 }
             }
         }
@@ -315,7 +339,7 @@ public class RMapGenorator : MonoBehaviour
     /// <param name="locationsCanVisit"></param> List of locations that are adjacent to the visited locations
     /// <param name="contains"></param>
     /// <param name="distanceFromStartArray"></param>
-    private void NewWeightSetter(PriorityListElement newWeightSquare, PriorityListElement currentPosition, List<PriorityListElement> locationsCanVisit, int contains, int[,] distanceFromStartArray)
+    private void NewWeightSetter(PriorityListElement newWeightSquare, PriorityListElement currentPosition, List<PriorityListElement> locationsCanVisit,List<int> locationsCanVisitWeightsList, int contains, int[,] distanceFromStartArray)
     {
         ObjectLocation squareObj = newWeightSquare._thisObject; //currentposition and square are equal**** sometimes (contains function prob)
         int squarex = squareObj._x;
@@ -333,16 +357,19 @@ public class RMapGenorator : MonoBehaviour
             if (whereInLocationsCanVisit<MAXINT)
             {
                 locationsCanVisit.RemoveAt(whereInLocationsCanVisit);
+                locationsCanVisitWeightsList.RemoveAt(whereInLocationsCanVisit);
             }
 
             newWeightSquare._thisWeight = possibleNewWeight;
             locationsCanVisit.Add(newWeightSquare);
+            locationsCanVisitWeightsList.Add(newWeightSquare._thisWeight);
         }
         else
         {
             if (contains == MAXINT) //if surrounding tile in not in locationsCanVisit then add it
             {
                 locationsCanVisit.Add(newWeightSquare);
+                locationsCanVisitWeightsList.Add(newWeightSquare._thisWeight);
             }
         }
     }
