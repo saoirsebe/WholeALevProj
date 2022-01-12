@@ -13,7 +13,7 @@ public class RMapGenorator : MonoBehaviour
     public Room Room;
     public List<ObjectLocation> wallsList = new List<ObjectLocation>();
 
-    private const int MAXINT = 2147473647;
+    private const int MAXINT = 1073731823;
     private HashSet<Vector2Int> corridors { get; set; } = new HashSet<Vector2Int>();
     private List<ObjectLocation> doorsNotVisited = new List<ObjectLocation>();
     public const int ARRAYMAX = 100;
@@ -51,8 +51,8 @@ public class RMapGenorator : MonoBehaviour
                 }
             }
             ObjectLocation doorStart = new ObjectLocation(21, 15, 0);
-            
             PickEnd(doorStart);
+
             StartShortestPathAlgorithm();
         }
     }
@@ -205,22 +205,6 @@ public class RMapGenorator : MonoBehaviour
             perminant.Add(currentPosition._thisObject);
             locationsCanVisit.RemoveAt(indexOfSmallest);
             locationsCanVisitWeightsList.RemoveAt(indexOfSmallest);
-
-            /*
-            foreach (var varr in locationsCanVisit)   //Makes current position the position with the lowest weight
-            {
-                int newCurrentWeight = varr._thisWeight;  //all weights 1***?
-                int isPerm = ContainsFunction(perminant, varr._thisObject);
-                if (newCurrentWeight < weightToCompare && isPerm == MAXINT)
-                {
-                    currentPosition = varr; //if all the same, current weight still needs to change
-                    weightToCompare = currentPosition._thisWeight;
-                }
-            }
-            perminant.Add(currentPosition._thisObject);
-            currentLocation = currentPosition._thisObject;
-            locationsCanVisit.RemoveAt(ContainsFunctionPLE(locationsCanVisit,currentPosition));*/
-
 
 
             List<PriorityListElement> adjacentLocations = FindSurrounding(distanceFromStartArray, currentPosition._thisObject); //currentLocation out of bounds error?
@@ -388,6 +372,7 @@ public class RMapGenorator : MonoBehaviour
         ObjectLocation thisDoor = startDoor;
         distanceFromStartArray[startDoor._x, startDoor._y] = MAXINT;
         distanceFromStartArray[endDoor._x, endDoor._y] = 0;
+        
         ObjectLocation nextSquare = thisDoor;
 
         while (thisDoor._x != endDoor._x || thisDoor._y != endDoor._y)//if hasnt reached end door
