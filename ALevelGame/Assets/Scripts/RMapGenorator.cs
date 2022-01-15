@@ -50,7 +50,7 @@ public class RMapGenorator : MonoBehaviour
                     WeightToMoveArray[wallx, wally] = MAXINT; //Set locations of walls in array to max int so weight of moving ples prev location will be max and not picked
                 }
             }
-            ObjectLocation doorStart = new ObjectLocation(21, 15, 0);
+            ObjectLocation doorStart = new ObjectLocation(41, 15, 0);
             PickEnd(doorStart);
 
             StartShortestPathAlgorithm();
@@ -102,7 +102,8 @@ public class RMapGenorator : MonoBehaviour
     {
         if(doorsn.Count>0)
         {
-            for (int x = 0; x < doorsn.Count; x++)
+            int numberOf = doorsn.Count;
+            for (int x = 0; x < numberOf; x++)
             {
                 ObjectLocation door = doorsn[0];
                 doorsn.RemoveAt(0);

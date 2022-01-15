@@ -300,7 +300,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floorTilemap: {fileID: 150064674}
-  floorTile: {fileID: 11400000, guid: 1a5874b2ef590bf48bedd0c71c7ff366, type: 2}
+  floorTile: {fileID: 11400000, guid: 50ca646cf62dae74b8c4fe5071617409, type: 2}
 --- !u!4 &435885747
 Transform:
   m_ObjectHideFlags: 0
