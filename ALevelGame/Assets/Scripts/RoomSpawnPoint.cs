@@ -16,6 +16,9 @@ public class RoomSpawnPoint : MonoBehaviour
     private GameObject s1;
     private RMapGenorator s11;
 
+    /// <summary>
+    /// Instantiated random room from list then locates its walls and doors to add to doors List and walls List then calles AddToRoomsMade function from RMapGenerator
+    /// </summary>
     void Start()
     {
         s1 = GameObject.Find("RMapGenerator");
