@@ -25,6 +25,9 @@ public class RMapGenorator : MonoBehaviour
     private GameObject thisScript;
     private TileMapVisualiser nextScript;
     private List<ObjectLocation> doorsVisited = new List<ObjectLocation>();
+    private int counterUntillGenerateCorridors;
+    private int totalNOfDoors;
+    private int numberOfCorridors;
 
     /// <summary>
     /// 
@@ -32,8 +35,22 @@ public class RMapGenorator : MonoBehaviour
     public void AddToRoomsMade()
     {
         roomsMade += 1;
+
         if (roomsMade == 4)
         {
+            counterUntillGenerateCorridors = 0;
+
+            //finds number of corridors to be made
+            totalNOfDoors = doorsNotVisited.Count;
+            if (totalNOfDoors % 2 > 0)
+            {
+                numberOfCorridors = totalNOfDoors / 2 + 1;
+            }
+            else
+            {
+                numberOfCorridors = totalNOfDoors / 2;
+            }
+
             for (int x = 0; x < ARRAYMAX; x++)
             {
                 for (int y = 0; y < ARRAYMAX; y++)
@@ -394,7 +411,13 @@ public class RMapGenorator : MonoBehaviour
             thisDoor = nextSquare;
             finalVisited.Add(thisDoor);
         }
-        runProceduralGeneration(corridors);
+        counterUntillGenerateCorridors += 1;
+        
+        if(counterUntillGenerateCorridors == numberOfCorridors)
+        {
+            runProceduralGeneration(corridors);
+            WallTilesAroundCorridor(corridors);
+        }
     }
 
 
@@ -405,10 +428,25 @@ public class RMapGenorator : MonoBehaviour
     public void runProceduralGeneration(HashSet<Vector2Int> floorPositions)
     {
         thisScript = GameObject.Find("TileMapVisualiser");
-        nextScript = thisScript.GetComponent<TileMapVisualiser>(); // breakpoint stops but wont go to next breakpoint (object reference not set to an instance of an object)
+        nextScript = thisScript.GetComponent<TileMapVisualiser>(); 
         IEnumerable<Vector2Int> positions = floorPositions; 
         nextScript.paintFloorTiles(positions); 
-        
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="corridors"></param>
+    private void WallTilesAroundCorridor(HashSet<Vector2Int> corridors)
+    {
+        thisScript = GameObject.Find("TileMapVisualiser");
+        nextScript = thisScript.GetComponent<TileMapVisualiser>();
+
+        foreach(var floorTile in corridors)
+        {
+            ObjectLocation floorTileObj = new ObjectLocation(floorTile.x, floorTile.y, 0);
+            List<PriorityListElement> adjacentTiles = FindSurrounding(WeightToMoveArray, floorTileObj);
+        }
     }
 }
 
