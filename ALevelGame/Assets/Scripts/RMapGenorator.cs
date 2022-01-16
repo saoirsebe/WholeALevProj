@@ -15,7 +15,8 @@ public class RMapGenorator : MonoBehaviour
 
     private const int MAXINT = 1073731823;
     private HashSet<Vector2Int> corridorsHashSet { get; set; } = new HashSet<Vector2Int>();
-    private List<ObjectLocation> corridorsObjList = new List<ObjectLocation>;
+    private HashSet<Vector2Int> corridorWallsHashSet { get; set; } = new HashSet<Vector2Int>();
+    private List<ObjectLocation> corridorsObjList = new List<ObjectLocation>();
     private List<ObjectLocation> doorsNotVisited = new List<ObjectLocation>();
     public const int ARRAYMAX = 100;
     private int[,] WeightToMoveArray = new int[ARRAYMAX, ARRAYMAX];
@@ -443,8 +444,9 @@ public class RMapGenorator : MonoBehaviour
     {
         thisScript = GameObject.Find("TileMapVisualiser");
         nextScript = thisScript.GetComponent<TileMapVisualiser>();
+        List<ObjectLocation> corridorWalls = new List<ObjectLocation>();
 
-        foreach(var floorTile in corridors)
+        foreach (var floorTile in corridors)
         {
             ObjectLocation floorTileObj = new ObjectLocation(floorTile.x, floorTile.y, 0);
             List<PriorityListElement> adjacentTiles = FindSurrounding(WeightToMoveArray, floorTileObj);
@@ -452,7 +454,12 @@ public class RMapGenorator : MonoBehaviour
             {
                 if(ContainsFunction(corridorsObjList,adjacentTile._thisObject)==MAXINT)
                 {
-
+                    if(ContainsFunction(corridorWalls ,adjacentTile._thisObject)==MAXINT)
+                    {
+                        corridorWalls.Add(adjacentTile._thisObject);
+                        Vector2Int nextWallVector = new Vector2Int(adjacentTile._thisObject._x, adjacentTile._thisObject._y);
+                        corridorWallsHashSet.Add(nextWallVector);
+                    }
                 }
             }
         }
