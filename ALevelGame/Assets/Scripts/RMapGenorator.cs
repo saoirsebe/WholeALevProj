@@ -16,6 +16,8 @@ public class RMapGenorator : MonoBehaviour
     private const int MAXINT = 1073731823;
     private HashSet<Vector2Int> corridorsHashSet { get; set; } = new HashSet<Vector2Int>();
     private HashSet<Vector2Int> corridorWallsHashSet { get; set; } = new HashSet<Vector2Int>();
+    
+
     private List<ObjectLocation> corridorsObjList = new List<ObjectLocation>();
     private List<ObjectLocation> doorsNotVisited = new List<ObjectLocation>();
     public const int ARRAYMAX = 100;
@@ -30,6 +32,10 @@ public class RMapGenorator : MonoBehaviour
     private int counterUntillGenerateCorridors;
     private int totalNOfDoors;
     private int numberOfCorridors;
+    [SerializeField]
+    private WallTileMapVisualiser WallTileMapVisualiser;
+    private GameObject WallTileMapVisualiserObj;
+    private WallTileMapVisualiser WallTileMapVisualiserScript;
 
     /// <summary>
     /// 
@@ -437,13 +443,11 @@ public class RMapGenorator : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// FInds positions surrounding the corridors that arent walls or corridors and adds to corridorWallsHashSet to then run WallTileMapVisualiserScript to generate the wall tiles
     /// </summary>
-    /// <param name="corridors"></param>
+    /// <param name="corridors"></param>Hashset of locations of corridoor tiles
     private void WallTilesAroundCorridor(HashSet<Vector2Int> corridors)
     {
-        thisScript = GameObject.Find("TileMapVisualiser");
-        nextScript = thisScript.GetComponent<TileMapVisualiser>();
         List<ObjectLocation> corridorWalls = new List<ObjectLocation>();
 
         foreach (var floorTile in corridors)
@@ -463,6 +467,10 @@ public class RMapGenorator : MonoBehaviour
                 }
             }
         }
+        WallTileMapVisualiserObj = GameObject.Find("WallTileMapVisualiser");
+        WallTileMapVisualiserScript = WallTileMapVisualiser.GetComponent<WallTileMapVisualiser>();
+        IEnumerable<Vector2Int> positions = corridorWallsHashSet;
+        WallTileMapVisualiserScript.paintFloorTiles(positions);
     }
 }
 

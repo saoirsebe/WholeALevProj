@@ -63,6 +63,7 @@
     <Compile Include="Assets\Scripts\Player_0.cs" />
     <Compile Include="Assets\Scripts\MainMenuScript.cs" />
     <Compile Include="Assets\Scripts\ObjectsScript.cs" />
+    <Compile Include="Assets\Scripts\WallTileMapVisualiser.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
