@@ -8,19 +8,18 @@ public class PickTask : MonoBehaviour
     List<string> gameObjectNames = new List<string>();
     private int objectToFindIndex;
     public string objectToFindName;
-
-    private GameObject CanvasObj;
-    private TaskInstructions taskInstructionScript;
-
     public static float timer;
     public static bool timeStarted = false;
     public string timeTaken;
 
+    private GameObject textObj;
+    private taskTextScript taskTextScript;
+
     // Start is called before the first frame update
     void Start()
     {
-        CanvasObj = GameObject.Find("Canvas");
-        taskInstructionScript = CanvasObj.GetComponent<TaskInstructions>();
+        textObj = GameObject.Find("ObjectText");
+        taskTextScript = textObj.GetComponent<taskTextScript>();
 
         foreach (var item in objects)
         {
@@ -29,6 +28,7 @@ public class PickTask : MonoBehaviour
         }
         objectToFindIndex = Random.Range(0, gameObjectNames.Count - 1);
         objectToFindName = gameObjectNames[objectToFindIndex];
+        taskTextScript.ChangeText(objectToFindName);
     }
 
     /// <summary>
