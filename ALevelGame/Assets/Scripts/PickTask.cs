@@ -23,7 +23,7 @@ public class PickTask : MonoBehaviour
         textObj = GameObject.Find("ObjectText");
         taskTextScript = textObj.GetComponent<taskTextScript>();
         rMapGeneratorObj = GameObject.Find("RMapGenerator");
-        RMapGenoratorScript = textObj.GetComponent<RMapGenorator>();
+        RMapGenoratorScript = rMapGeneratorObj.GetComponent<RMapGenorator>();
     }
 
     public void AddToObjectsInRoomsList(string objectNameToAdd)
@@ -31,13 +31,13 @@ public class PickTask : MonoBehaviour
         objectsInRoomsList.Add(objectNameToAdd);
         objectsAddedToList += 1;
 
-        if(RMapGenoratorScript.totalNOfDoors== objectsAddedToList)
+
+        if(RMapGenoratorScript.TOTALNOFROOMS == objectsAddedToList)
         {
             objectToFindIndex = Random.Range(0, objectsInRoomsList.Count - 1);
             objectToFindName = objectsInRoomsList[objectToFindIndex];
             taskTextScript.ChangeText(objectToFindName);
         }
-        
     }
 
     /// <summary>

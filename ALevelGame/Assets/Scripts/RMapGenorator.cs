@@ -30,12 +30,13 @@ public class RMapGenorator : MonoBehaviour
     private TileMapVisualiser nextScript;
     private List<ObjectLocation> doorsVisited = new List<ObjectLocation>();
     private int counterUntillGenerateCorridors;
-    public int totalNOfDoors;
+    private int totalNOfDoors;
     private int numberOfCorridors;
     [SerializeField]
     private WallTileMapVisualiser WallTileMapVisualiser;
     private GameObject WallTileMapVisualiserObj;
     private WallTileMapVisualiser WallTileMapVisualiserScript;
+    public int TOTALNOFROOMS = 4;
 
     /// <summary>
     /// 
@@ -44,7 +45,7 @@ public class RMapGenorator : MonoBehaviour
     {
         roomsMade += 1;
 
-        if (roomsMade == 4)
+        if (roomsMade == TOTALNOFROOMS)
         {
             counterUntillGenerateCorridors = 0;
 
@@ -468,7 +469,7 @@ public class RMapGenorator : MonoBehaviour
             }
         }
         WallTileMapVisualiserObj = GameObject.Find("WallTileMapVisualiser");
-        WallTileMapVisualiserScript = WallTileMapVisualiser.GetComponent<WallTileMapVisualiser>();
+        WallTileMapVisualiserScript = WallTileMapVisualiserObj.GetComponent<WallTileMapVisualiser>();
         IEnumerable<Vector2Int> positions = corridorWallsHashSet;
         WallTileMapVisualiserScript.paintFloorTiles(positions);
     }
