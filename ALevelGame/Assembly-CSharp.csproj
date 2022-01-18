@@ -65,6 +65,7 @@
     <Compile Include="Assets\Scripts\ObjectsScript.cs" />
     <Compile Include="Assets\Scripts\WallTileMapVisualiser.cs" />
     <Compile Include="Assets\Scripts\PickTask.cs" />
+    <Compile Include="Assets\Scripts\TaskInstructions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
