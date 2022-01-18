@@ -23,6 +23,9 @@ public class TaskInstructions : MonoBehaviour
         InstructionsMenu.SetActive(true);
     }
 
+    /// <summary>
+    /// CLoses instructions panel when close button is pressed and starts the timer by running startTimer function in PickTaskScript
+    /// </summary>
     public void CloseButton()
     {
         InstructionsMenu.SetActive(false);

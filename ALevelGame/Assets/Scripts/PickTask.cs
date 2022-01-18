@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PickTask : MonoBehaviour
 { 
-    public GameObject[] objects;
-    List<string> gameObjectNames = new List<string>();
     private int objectToFindIndex;
     public string objectToFindName;
     public static float timer;
@@ -14,20 +12,21 @@ public class PickTask : MonoBehaviour
 
     private GameObject textObj;
     private taskTextScript taskTextScript;
+    public List<string> objectsInRoomsList = new List<string>();
 
     // Start is called before the first frame update
     void Start()
     {
         textObj = GameObject.Find("ObjectText");
         taskTextScript = textObj.GetComponent<taskTextScript>();
+    }
 
-        foreach (var item in objects)
-        {
-            string itemName = item.name;
-            gameObjectNames.Add(itemName);
-        }
-        objectToFindIndex = Random.Range(0, gameObjectNames.Count - 1);
-        objectToFindName = gameObjectNames[objectToFindIndex];
+    public void AddToObjectsInRoomsList(string objectNameToAdd)
+    {
+        objectsInRoomsList.Add(objectNameToAdd);
+
+        objectToFindIndex = Random.Range(0, objectsInRoomsList.Count - 1);
+        objectToFindName = objectsInRoomsList[objectToFindIndex];
         taskTextScript.ChangeText(objectToFindName);
     }
 

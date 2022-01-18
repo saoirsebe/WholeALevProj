@@ -12,14 +12,12 @@ public class taskTextScript : MonoBehaviour
         instruction = gameObject.GetComponent<Text>();
     }
 
+    /// <summary>
+    /// Called after ObjectToFind is picked and shows text of which object is to be found in the instructions panel
+    /// </summary>
+    /// <param name="objectToFindName"></param>
     public void ChangeText(string objectToFindName)
     {
         instruction.text = objectToFindName;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
