@@ -6,9 +6,14 @@ public class TaskInstructions : MonoBehaviour
 {
     public GameObject InstructionsMenu;
     // Start is called before the first frame update
-    private System.DateTime startTime;
+
+    private GameObject PickTaskObj;
+    private PickTask PickTaskScript;
+
     void Start()
     {
+        PickTaskObj = GameObject.Find("PickTask");
+        PickTaskScript = PickTaskObj.GetComponent<PickTask>();
         MainMenuButton();
     }
 
@@ -21,7 +26,7 @@ public class TaskInstructions : MonoBehaviour
     public void CloseButton()
     {
         InstructionsMenu.SetActive(false);
-        startTime = System.DateTime.Now;
+        PickTaskScript.startTimer();
     }
 }
 

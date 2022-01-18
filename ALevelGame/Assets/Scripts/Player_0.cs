@@ -8,15 +8,20 @@ public class Player_0 : MonoBehaviour
     private Vector3 moveDelta;
     private RaycastHit2D hit;
 
+    private GameObject PickTaskObj;
+    private PickTask PickTaskScript;
+
     // Start is called before the first frame update
     void Start()
     {
         boxCollider = GetComponent<BoxCollider2D>();
+
+        PickTaskObj = GameObject.Find("PickTask");
+        PickTaskScript = PickTaskObj.GetComponent<PickTask>();
     }
 
     private void FixedUpdate()
     {
-
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
 
@@ -51,9 +56,15 @@ public class Player_0 : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// When objectToFind is found then run TaskFinished in PickTask script
+    /// </summary>
+    /// <param name="other"></param>The object that has been collided with
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if(PickTaskScript.objectToFindName == other.name)
+        {
+            PickTaskObj.BroadcastMessage("TaskFinished");
+        }
     }
 }
