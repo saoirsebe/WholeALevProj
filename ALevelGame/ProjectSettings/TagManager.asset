@@ -15,7 +15,7 @@ TagManager:
   - UI
   - Blocking
   - Actor
-  - 
+  - Object
   - 
   - 
   - 
@@ -42,6 +42,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Objects
+    uniqueID: 4290368097
     locked: 0
   - name: Actor
     uniqueID: 2840051497
