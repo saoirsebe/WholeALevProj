@@ -30,7 +30,7 @@ public class RMapGenorator : MonoBehaviour
     private TileMapVisualiser nextScript;
     private List<ObjectLocation> doorsVisited = new List<ObjectLocation>();
     private int counterUntillGenerateCorridors;
-    private int totalNOfDoors;
+    public int totalNOfDoors;
     private int numberOfCorridors;
     [SerializeField]
     private WallTileMapVisualiser WallTileMapVisualiser;

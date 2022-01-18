@@ -9,25 +9,35 @@ public class PickTask : MonoBehaviour
     public static float timer;
     public static bool timeStarted = false;
     public string timeTaken;
-
+    private GameObject rMapGeneratorObj;
+    private RMapGenorator RMapGenoratorScript;
     private GameObject textObj;
     private taskTextScript taskTextScript;
     public List<string> objectsInRoomsList = new List<string>();
+    private int objectsAddedToList;
 
     // Start is called before the first frame update
     void Start()
     {
+        objectsAddedToList = 0;
         textObj = GameObject.Find("ObjectText");
         taskTextScript = textObj.GetComponent<taskTextScript>();
+        rMapGeneratorObj = GameObject.Find("RMapGenerator");
+        RMapGenoratorScript = textObj.GetComponent<RMapGenorator>();
     }
 
     public void AddToObjectsInRoomsList(string objectNameToAdd)
     {
         objectsInRoomsList.Add(objectNameToAdd);
+        objectsAddedToList += 1;
 
-        objectToFindIndex = Random.Range(0, objectsInRoomsList.Count - 1);
-        objectToFindName = objectsInRoomsList[objectToFindIndex];
-        taskTextScript.ChangeText(objectToFindName);
+        if(RMapGenoratorScript.totalNOfDoors== objectsAddedToList)
+        {
+            objectToFindIndex = Random.Range(0, objectsInRoomsList.Count - 1);
+            objectToFindName = objectsInRoomsList[objectToFindIndex];
+            taskTextScript.ChangeText(objectToFindName);
+        }
+        
     }
 
     /// <summary>
