@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5826074879648497144}
   - component: {fileID: 6022186010283458704}
   - component: {fileID: 3253371310187372256}
+  - component: {fileID: 5436192241439012377}
   m_Layer: 6
   m_Name: Orange
   m_TagString: Untagged
@@ -96,7 +97,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.13208961, y: -0.120081306}
+  m_Offset: {x: -0.13208961, y: -0.13208866}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -107,5 +108,31 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.7358208, y: 1.7348373}
+  m_Size: {x: 1.7838554, y: 1.7828693}
+  m_EdgeRadius: 0
+--- !u!61 &5436192241439012377
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643429701675116297}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.11407852, y: -0.12608528}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2, y: 1.975}
+    newSize: {x: 8, y: 7.9}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.5556946, y: 1.5787277}
   m_EdgeRadius: 0

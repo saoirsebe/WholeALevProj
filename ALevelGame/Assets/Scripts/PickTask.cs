@@ -15,6 +15,8 @@ public class PickTask : MonoBehaviour
     private taskTextScript taskTextScript;
     public List<string> objectsInRoomsList = new List<string>();
     private int objectsAddedToList;
+    private GameObject CanvasObj;
+    private TaskInstructions TaskInstructionsScript;
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +26,8 @@ public class PickTask : MonoBehaviour
         taskTextScript = textObj.GetComponent<taskTextScript>();
         rMapGeneratorObj = GameObject.Find("RMapGenerator");
         RMapGenoratorScript = rMapGeneratorObj.GetComponent<RMapGenorator>();
+        CanvasObj = GameObject.Find("Canvas");
+        TaskInstructionsScript = CanvasObj.GetComponent<TaskInstructions>();
     }
 
     public void AddToObjectsInRoomsList(string objectNameToAdd)
@@ -56,14 +60,24 @@ public class PickTask : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    public void TaskFinished()
+    /// <summary>
+    /// Once the object is found the time taken is found and RepeatFindObj is called
+    /// </summary>
+    public void TaskFinished(bool firstFind)
     {
         int minutes = Mathf.FloorToInt(timer / 60F);
         int seconds = Mathf.FloorToInt(timer - minutes * 60);
         string niceTime = string.Format("{0:0}:{1:00}", minutes, seconds);
 
-        GUI.Label(new Rect(10, 10, 250, 100), niceTime);
         timeTaken = niceTime;
+
+        if (firstFind == false)
+        {
+            TaskInstructionsScript.OpenSecondInstructions();
+        }
+        else
+        {
+            TaskInstructionsScript.OpenEndScreen();
+        }
     }
 }

@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\PickTask.cs" />
     <Compile Include="Assets\Scripts\TaskInstructions.cs" />
     <Compile Include="Assets\Scripts\taskTextScript.cs" />
+    <Compile Include="Assets\Scripts\startRoomScript.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

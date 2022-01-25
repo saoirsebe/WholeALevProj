@@ -11,9 +11,14 @@ public class Player_0 : MonoBehaviour
     private GameObject PickTaskObj;
     private PickTask PickTaskScript;
 
+    private bool firstFind;
+
+
     // Start is called before the first frame update
     void Start()
     {
+        firstFind = false;
+
         boxCollider = GetComponent<BoxCollider2D>();
 
         PickTaskObj = GameObject.Find("PickTask");
@@ -57,14 +62,29 @@ public class Player_0 : MonoBehaviour
     }
 
     /// <summary>
-    /// When objectToFind is found then run TaskFinished in PickTask script
+    /// When objectToFind is found then run TaskFinished in PickTask script, reset player position and open second instructions
     /// </summary>
     /// <param name="other"></param>The object that has been collided with
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log("aa");
         if(PickTaskScript.objectToFindName == other.name)
         {
-            PickTaskObj.BroadcastMessage("TaskFinished");
+            if (firstFind == false)
+            {
+                PickTaskScript.TaskFinished(firstFind);
+                ResetPosition();
+                firstFind = true;
+            }
+            else
+            {
+                PickTaskScript.TaskFinished(firstFind);
+            } 
         }
+    }
+
+    public void ResetPosition()
+    {
+        transform.position = new Vector3(35, 11, 0);
     }
 }

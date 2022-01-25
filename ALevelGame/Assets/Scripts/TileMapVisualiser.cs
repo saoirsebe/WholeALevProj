@@ -11,6 +11,8 @@ public class TileMapVisualiser : MonoBehaviour
     [SerializeField]
     private TileBase floorTile;
 
+    
+
     public void paintFloorTiles(IEnumerable<Vector2Int> floorPositions) //Defining method for painting
     {
         paintTiles(floorPositions, floorTilemap, floorTile);

@@ -54,6 +54,13 @@ public class RoomSpawnPoint : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// sets the variable perent to the transform of the instantiated room game object then calls the function GetChildObject and returns the list this fuction returns
+    /// </summary>
+    /// <param name="_tag"></param>
+    /// <param name="obj"></param>
+    /// <param name="listToAdd"></param>
+    /// <returns></returns>
     private List<ObjectLocation> FindObjectswithTag(string _tag,GameObject obj, List<ObjectLocation> listToAdd)
     {
         listToAdd.Clear();
@@ -63,6 +70,13 @@ public class RoomSpawnPoint : MonoBehaviour
         return listToReturn;
     }
 
+    /// <summary>
+    /// For a range of 0-the number of children the parent has the child tag is checked against  _tag and added to listToAdd, this list is then returned.
+    /// </summary>
+    /// <param name="parent"></param> The transform of the instantiated room game object
+    /// <param name="_tag"></param> The tag being searched for
+    /// <param name="listToAdd"></param> A list of the locations of children with a tag equal to _tag
+    /// <returns></returns>
     private List<ObjectLocation> GetChildObject(Transform parent, string _tag, List<ObjectLocation> listToAdd)
     {
         for(int i = 0; i < parent.childCount; i++) //for each child of current room, if game tag == "Door" then add x and y coordinates to the list doors
