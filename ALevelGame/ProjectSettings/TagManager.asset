@@ -52,3 +52,6 @@ TagManager:
   - name: Instructions
     uniqueID: 4221937629
     locked: 0
+  - name: InstructionObjects
+    uniqueID: 4011672509
+    locked: 0

@@ -61,7 +61,7 @@ public class RoomSpawnPoint : MonoBehaviour
     /// <param name="obj"></param>
     /// <param name="listToAdd"></param>
     /// <returns></returns>
-    private List<ObjectLocation> FindObjectswithTag(string _tag,GameObject obj, List<ObjectLocation> listToAdd)
+    public List<ObjectLocation> FindObjectswithTag(string _tag,GameObject obj, List<ObjectLocation> listToAdd)
     {
         listToAdd.Clear();
         Transform parent = obj.transform;

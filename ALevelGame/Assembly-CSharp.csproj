@@ -56,18 +56,18 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\ObjectsScript.cs" />
     <Compile Include="Assets\Scripts\RMapGenorator.cs" />
+    <Compile Include="Assets\Scripts\TaskInstructions.cs" />
+    <Compile Include="Assets\Scripts\startRoomScript.cs" />
     <Compile Include="Assets\Scripts\RoomSpawnPoint.cs" />
+    <Compile Include="Assets\Scripts\taskTextScript.cs" />
+    <Compile Include="Assets\Scripts\WallTileMapVisualiser.cs" />
     <Compile Include="Assets\Scripts\TileMapVisualiser.cs" />
     <Compile Include="Assets\Scripts\CameraMotor.cs" />
     <Compile Include="Assets\Scripts\Player_0.cs" />
-    <Compile Include="Assets\Scripts\MainMenuScript.cs" />
-    <Compile Include="Assets\Scripts\ObjectsScript.cs" />
-    <Compile Include="Assets\Scripts\WallTileMapVisualiser.cs" />
     <Compile Include="Assets\Scripts\PickTask.cs" />
-    <Compile Include="Assets\Scripts\TaskInstructions.cs" />
-    <Compile Include="Assets\Scripts\taskTextScript.cs" />
-    <Compile Include="Assets\Scripts\startRoomScript.cs" />
+    <Compile Include="Assets\Scripts\MainMenuScript.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

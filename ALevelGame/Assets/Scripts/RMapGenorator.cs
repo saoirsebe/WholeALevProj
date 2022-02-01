@@ -20,7 +20,7 @@ public class RMapGenorator : MonoBehaviour
 
     private List<ObjectLocation> corridorsObjList = new List<ObjectLocation>();
     private List<ObjectLocation> doorsNotVisited = new List<ObjectLocation>();
-    public const int ARRAYMAX = 100;
+    public const int ARRAYMAX = 120;
     private int[,] WeightToMoveArray = new int[ARRAYMAX, ARRAYMAX];
     private int roomsMade;
 
@@ -281,7 +281,7 @@ public class RMapGenorator : MonoBehaviour
         return whereItContains;
     }
 
-    private int ContainsFunction(List<ObjectLocation> listToCheck,ObjectLocation isItemIn)//return where in list it is and maxint is its not
+    public int ContainsFunction(List<ObjectLocation> listToCheck,ObjectLocation isItemIn)//return where in list it is and maxint is its not
     {
         int whereItContains = MAXINT;
         int counter = 0;
@@ -296,10 +296,10 @@ public class RMapGenorator : MonoBehaviour
         return whereItContains;
     }
 
-    private List<PriorityListElement> FindSurrounding(int[,] distanceFromStartArray, ObjectLocation MiddleDoor)
+    public List<PriorityListElement> FindSurrounding(int[,] distanceFromStartArray, ObjectLocation MiddleSquare)
     {
-        int xcurrentPosition = MiddleDoor._x;
-        int ycurrentPosition = MiddleDoor._y;
+        int xcurrentPosition = MiddleSquare._x;
+        int ycurrentPosition = MiddleSquare._y;
         List<PriorityListElement> adjacentLocations = new List<PriorityListElement>();
         ObjectLocation leftSquareObj = new ObjectLocation(xcurrentPosition - 1, ycurrentPosition, 0);
         if(IsInBoundsOfArray(leftSquareObj)==true)
@@ -333,7 +333,7 @@ public class RMapGenorator : MonoBehaviour
     /// </summary>
     /// <param name="square"></param> The square that is checked if it is in the array
     /// <returns></returns>
-    private bool IsInBoundsOfArray(ObjectLocation square)
+    public bool IsInBoundsOfArray(ObjectLocation square)
     {
         bool contains = false;
         if (-1 < square._x && square._x <= ARRAYMAX-1 && -1 < square._y && square._y <= ARRAYMAX-1) //if in array
@@ -450,6 +450,21 @@ public class RMapGenorator : MonoBehaviour
     private void WallTilesAroundCorridor(HashSet<Vector2Int> corridors)
     {
         List<ObjectLocation> corridorWalls = new List<ObjectLocation>();
+        /*corridorsObjList.Add(new ObjectLocation(41, 14, 0));
+        corridorsObjList.Add(new ObjectLocation(41, 15, 0));
+
+        //makes walls in squares around doors so remove doors from corridors
+        foreach(var door in doorsVisited)
+        {
+
+            int whereInCorridors = ContainsFunction(corridorsObjList, door);
+            if (whereInCorridors < MAXINT)
+            {
+                corridors.Remove(door);
+            }
+            
+        }*/
+
 
         foreach (var floorTile in corridors)
         {
@@ -457,14 +472,11 @@ public class RMapGenorator : MonoBehaviour
             List<PriorityListElement> adjacentTiles = FindSurrounding(WeightToMoveArray, floorTileObj);
             foreach(var adjacentTile in adjacentTiles)
             {
-                if(ContainsFunction(corridorsObjList,adjacentTile._thisObject)==MAXINT)
+                if(ContainsFunction(corridorsObjList,adjacentTile._thisObject)==MAXINT && ContainsFunction(doorsVisited, adjacentTile._thisObject) == MAXINT && ContainsFunction(corridorWalls, adjacentTile._thisObject) == MAXINT)
                 {
-                    if(ContainsFunction(corridorWalls ,adjacentTile._thisObject)==MAXINT)
-                    {
-                        corridorWalls.Add(adjacentTile._thisObject);
-                        Vector2Int nextWallVector = new Vector2Int(adjacentTile._thisObject._x, adjacentTile._thisObject._y);
-                        corridorWallsHashSet.Add(nextWallVector);
-                    }
+                    corridorWalls.Add(adjacentTile._thisObject);
+                    Vector2Int nextWallVector = new Vector2Int(adjacentTile._thisObject._x, adjacentTile._thisObject._y);
+                    corridorWallsHashSet.Add(nextWallVector);
                 }
             }
         }

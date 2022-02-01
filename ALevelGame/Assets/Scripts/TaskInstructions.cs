@@ -8,7 +8,10 @@ public class TaskInstructions : MonoBehaviour
     private GameObject PickTaskObj;
     private PickTask PickTaskScript;
     public GameObject SecondInstructions;
-    public GameObject EndScreen;
+    public GameObject endScreen;
+    public GameObject forgottenObject;
+    public GameObject forgottenTask;
+    public GameObject[] objects;
 
     void Start()
     {
@@ -25,7 +28,9 @@ public class TaskInstructions : MonoBehaviour
         // Show Instructions
         InstructionsMenu.SetActive(true);
         SecondInstructions.SetActive(false);
-        EndScreen.SetActive(false);
+        endScreen.SetActive(false);
+        forgottenObject.SetActive(false);
+        forgottenTask.SetActive(false);
     }
 
     /// <summary>
@@ -48,9 +53,34 @@ public class TaskInstructions : MonoBehaviour
         SecondInstructions.SetActive(true);
     }
 
+    public void OpenForgottenObject()
+    {
+        forgottenObject.SetActive(true);
+        PickTaskScript.ChangeTextFunction();
+        PickTaskScript.ForgotTaskObject();
+    }
+    public void CloseForgottenObject()
+    {
+        forgottenObject.SetActive(false);
+    }
+    public void OpenForgottenTask()
+    {
+        forgottenTask.SetActive(true);
+    }
+    public void CloseForgottenTask()
+    {
+        forgottenTask.SetActive(false);
+    }
+
     public void OpenEndScreen()
     {
-        EndScreen.SetActive(true);
+        endScreen.SetActive(true);
+    }
+
+    public void ShowObjectPicture()
+    {
+        PickTaskScript.ShowPictureOfObject();
+
     }
 
     public void EndButton()
