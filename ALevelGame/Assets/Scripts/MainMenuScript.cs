@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MainMenuScript : MonoBehaviour
 {
-    
     public GameObject MainMenu;
     public GameObject InstructionsMenu;
 
@@ -34,7 +33,6 @@ public class MainMenuScript : MonoBehaviour
         InstructionsMenu.SetActive(true);
     }
 
-    
 
     public void QuitButton()
     {

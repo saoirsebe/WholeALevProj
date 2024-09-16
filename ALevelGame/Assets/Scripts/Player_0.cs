@@ -8,15 +8,25 @@ public class Player_0 : MonoBehaviour
     private Vector3 moveDelta;
     private RaycastHit2D hit;
 
+    private GameObject PickTaskObj;
+    private PickTask PickTaskScript;
+
+    private bool firstFind;
+
+
     // Start is called before the first frame update
     void Start()
     {
+        firstFind = false;
+
         boxCollider = GetComponent<BoxCollider2D>();
+
+        PickTaskObj = GameObject.Find("PickTask");
+        PickTaskScript = PickTaskObj.GetComponent<PickTask>();
     }
 
     private void FixedUpdate()
     {
-
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
 
@@ -38,22 +48,43 @@ public class Player_0 : MonoBehaviour
         if (hit.collider == null)
         {
             //Movement
-            transform.Translate(0,moveDelta.y * Time.deltaTime,0);
+            transform.Translate(0,moveDelta.y * Time.deltaTime*2,0);
         }
 
         hit = Physics2D.BoxCast(transform.position, boxCollider.size, 0, new Vector2(moveDelta.x,0), Mathf.Abs(moveDelta.x * Time.deltaTime), LayerMask.GetMask("Actor", "Blocking"));
         if (hit.collider == null)
         {
             //Movement
-            transform.Translate(moveDelta.x * Time.deltaTime, 0, 0);
+            transform.Translate(moveDelta.x * Time.deltaTime*2, 0, 0);
         }
 
 
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// When objectToFind is found then run TaskFinished in PickTask script, reset player position and open second instructions
+    /// </summary>
+    /// <param name="other"></param>The object that has been collided with
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        
+        Debug.Log("aa");
+        if(PickTaskScript.objectToFindName == other.name)
+        {
+            if (firstFind == false)
+            {
+                PickTaskScript.TaskFinished(firstFind);
+                ResetPosition();
+                firstFind = true;
+            }
+            else
+            {
+                PickTaskScript.TaskFinished(firstFind);
+            } 
+        }
+    }
+
+    public void ResetPosition()
+    {
+        transform.position = new Vector3(35, 11, 0);
     }
 }
